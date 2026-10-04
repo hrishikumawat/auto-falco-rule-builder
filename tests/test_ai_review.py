@@ -91,7 +91,18 @@ def setup(tmp_path):
 def test_accept_exports_only_after_review_and_sources_unchanged(tmp_path):
     args, rule = setup(tmp_path); original = rule.read_bytes(); client = Client()
     answers = iter(["", "a"])
-    assert review(args, input_fn=lambda _: next(answers), output=lambda _: None, client=client) == 0
+    displayed = []
+    def approve(_):
+        text = '\n'.join(displayed)
+        assert 'What you are approving:' in text
+        assert 'full command line is "health"' in text
+        assert 'parent process name is "cron"' in text
+        assert 'user account is "svc"' in text
+        assert 'Why the AI recommends suppression: Approved health check' in text
+        assert '1 of 2 recorded alerts (50%)' in text
+        assert 'not a verified authorization decision' in text
+        return next(answers)
+    assert review(args, input_fn=approve, output=displayed.append, client=client) == 0
     out = Path(args.out)
     assert rule.read_bytes() == original
     assert "and not afb_review_" in (out / "accepted-rules/test.yaml").read_text()
@@ -100,6 +111,8 @@ def test_accept_exports_only_after_review_and_sources_unchanged(tmp_path):
     report = json.loads((out / "proposals/001/proposal.json").read_text())
     assert report["tests"]["status"] == "not_run"
     assert report["validation"]["status"] == "static_lint_only"
+    assert report['approval_summary']['suppression_reason'] == 'Approved health check'
+    assert report['approval_summary']['recorded_impact'] in '\n'.join(displayed)
 
 
 @pytest.mark.parametrize("choice", ["r", "q"])

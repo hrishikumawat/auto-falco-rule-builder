@@ -242,6 +242,30 @@ def render(entries):
     return yaml.safe_dump(entries, sort_keys=False, allow_unicode=False)
 
 
+def explain_change(rule, relative_path, scope, groups, selected_ids, reason):
+    """Explain the compiled edit from checked values, separate from AI reasoning."""
+    labels = {
+        "proc.name": "process name", "proc.cmdline": "full command line",
+        "proc.exepath": "executable path", "proc.pname": "parent process name",
+        "user.name": "user account", "k8s.ns.name": "Kubernetes namespace",
+        "container.image.repository": "container image repository",
+        "fd.name": "file or connection name", "fd.directory": "file directory",
+    }
+    total = sum(len(g["records"]) for g in groups)
+    affected = sum(len(g["records"]) for g in groups if g["id"] in selected_ids)
+    return {
+        "current": f"Rule '{rule['rule']}' raised {total} alerts in the supplied logs.",
+        "rule_description": str(rule.get("desc", "No description supplied.")),
+        "change": "Keep the existing detection conditions and add an exception. This rule will stop alerting only when ALL of these values match exactly:",
+        "matching_values": [f"{labels[field]} is {json.dumps(value, ensure_ascii=True)}" for field, value in scope.items()],
+        "suppression_reason": reason,
+        "reason_basis": "This is the AI's interpretation of your authorization context, not a verified authorization decision. Repetition alone is not a reason to suppress.",
+        "recorded_impact": f"{affected} of {total} recorded alerts ({affected / total:.0%}) match this exception; {total - affected} do not. This is an alert-value check, not runtime replay.",
+        "risk": "Future activity with this exact combination will also be hidden by this rule, even if malicious. Confirm this exact activity and workload are authorized before accepting.",
+        "file_action": f"Accept exports a replacement copy of {relative_path} under accepted-rules/. Your source file stays unchanged.",
+    }
+
+
 def ensure_unchanged(hashes):
     for path, expected in hashes.items():
         if not Path(path).is_file() or digest(Path(path).read_bytes()) != expected:
@@ -357,7 +381,8 @@ def review(args, input_fn=input, output=print, client=None):
                         session["decisions"].append({"rule": rule_name, "decision": "error", "reason": str(exc)})
                     continue
                 save()
-                output(safe_text("AI explanation: " + proposal["reason"]))
+                if proposal["decision"] != "propose":
+                    output(safe_text("AI explanation: " + proposal["reason"]))
                 if proposal["decision"] == "needs_context":
                     reply = input_fn(safe_text(proposal["question"] + " (answer, or Enter to skip): ")).strip()
                     if not reply:
@@ -384,15 +409,26 @@ def review(args, input_fn=input, output=print, client=None):
                           "preserved_evidence_ids": [r["id"] for g in groups if g["id"] not in proposal["group_ids"] for r in g["records"]]}
                 report["evidence"] = [{"id": r["id"], "source_alert_id": r["source_alert_id"], "provenance": r["provenance"]}
                                       for r in evidence]
+                summary = explain_change(next(e for e in docs[path] if e.get("rule") == rule_name),
+                                         str(path.relative_to(root)), scope, groups, proposal["group_ids"], proposal["reason"])
+                report["approval_summary"] = summary
                 (artifact_dir / "proposal.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
                 (artifact_dir / "candidate.yaml").write_text(candidate, encoding="utf-8")
                 (artifact_dir / "change.diff").write_text(delta, encoding="utf-8")
-                output(safe_text("Proposed exact exception: " + json.dumps(scope)))
-                output(safe_text("Blind spot: " + proposal["blind_spot"]))
-                output("Compiled effect: only the exact conjunction of the displayed values is excepted; future matching activity is also hidden by this rule.")
                 output(safe_text(delta))
                 output(f"Validation: {validation.get('status')}; replay: {tests.get('status')}")
                 output("Recorded evidence checks are not runtime proof. YAML formatting/comments may change on export.")
+                output("\nWhat you are approving:")
+                output(safe_text("Currently: " + summary["current"]))
+                output(safe_text("Rule description (from your file): " + summary["rule_description"]))
+                output(safe_text("Change: " + summary["change"]))
+                for value in summary["matching_values"]:
+                    output(safe_text("  - " + value))
+                output(safe_text("Why the AI recommends suppression: " + summary["suppression_reason"]))
+                output(safe_text(summary["reason_basis"]))
+                output(safe_text("Expected impact on these logs: " + summary["recorded_impact"]))
+                output(safe_text("Tradeoff: " + summary["risk"]))
+                output(safe_text(summary["file_action"]))
                 blocked = validation.get("status") == "failed" or tests.get("status") == "failed"
                 while True:
                     choice = input_fn("[a]ccept export / [r]eject / [f]eedback / [q]uit: ").strip().lower()

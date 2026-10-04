@@ -27,7 +27,17 @@ Use `--validation-mode container` to require engine validation rather than
 permit the automatic static fallback when Docker is unavailable.
 
 For each proposal you see the AI explanation, exact exception values, blind
-spot, actual file diff, validation status and replay status. Choose:
+spot, actual file diff, validation status and replay status.
+
+Immediately before approval, a plain-English summary explains the current
+rule, the exact command/account/workload combination being excepted, the AI's
+reason to suppress it, the number and percentage of this rule's recorded alerts
+affected, and the future detection tradeoff. The change and counts are derived
+from the checked proposal; the AI's authorization reasoning remains a claim
+for you to verify. The summary is also saved as `approval_summary` in each
+`proposal.json`.
+
+Choose:
 
 - `a`: accept this proposal for export and proceed to the next rule.
 - `r`: reject this proposal and proceed to the next rule.
