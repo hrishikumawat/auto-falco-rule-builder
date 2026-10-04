@@ -30,6 +30,15 @@ def _load_expectations(path: str | None) -> list[dict]:
     return json.loads(Path(path).read_text())
 
 
+def _input_files(args, profile, primary):
+    files = list(primary) + [args.profile] + list(args.captures or [])
+    files += list(profile.rules_files or [])
+    for path in [args.expectations, args.deployment_ruleset, profile.config_file]:
+        if path:
+            files.append(path)
+    return list(dict.fromkeys(map(str, files)))
+
+
 def cmd_create(args) -> int:
     profile = load_profile(args.profile)
     corpus = load_alerts(args.alerts)
@@ -37,15 +46,15 @@ def cmd_create(args) -> int:
     spec = plan_detection(summary, profile, args.proc, args.namespace)
     rule_doc = generate_rule(spec, profile)
     candidate = render_yaml(rule_doc)
-    validation = validate(candidate, profile)
+    validation = validate(candidate, profile, mode=args.validation_mode)
     tests = run_tests(candidate, profile, captures=args.captures or [],
                       expectations=_load_expectations(args.expectations),
-                      deployment_ruleset=args.deployment_ruleset)
+                      deployment_ruleset=Path(args.deployment_ruleset).read_text(encoding="utf-8") if args.deployment_ruleset else None)
     result = export(args.out, spec, candidate, validation, tests,
-                    summary.to_dict(), profile, [args.alerts, args.profile])
+                    summary.to_dict(), profile, _input_files(args, profile, [args.alerts]))
     rc = 0 if validation.get("status") in ("passed", "static_lint_only") else 1
     if tests.get("status") == "failed":
-        rc = 3  # replay assertions failed — candidate does not behave as specified
+        rc = 3  # replay assertions failed â€” candidate does not behave as specified
     print(json.dumps({"status": validation.get("status"), "tests": tests.get("status"),
                       "out": result["out_dir"], "files": result["files"]}, indent=2))
     return rc
@@ -55,9 +64,11 @@ def cmd_tune(args) -> int:
     profile = load_profile(args.profile)
     classified = load_classified_alerts(args.classified_alerts)
     tuned = tune_rule(args.rule.read_text() if hasattr(args.rule, "read_text") else open(args.rule).read(), classified)
-    validation = validate(tuned["tuned_yaml"], profile)
+    validation = validate(tuned["tuned_yaml"], profile, mode=args.validation_mode)
     tests = run_tests(tuned["tuned_yaml"], profile, captures=args.captures or [],
-                      expectations=_load_expectations(args.expectations))
+                      expectations=_load_expectations(args.expectations),
+                      deployment_ruleset=Path(args.deployment_ruleset).read_text(encoding="utf-8") if args.deployment_ruleset else None)
+    tests["regression_expectations"] = tuned["regression_expectations"]
     from .planner import DetectionSpec
     spec = DetectionSpec(
         spec_version=1, intent=f"tune rule {args.rule}",
@@ -71,11 +82,11 @@ def cmd_tune(args) -> int:
                         "true_positive": sum(1 for c in classified if c.get("classification") == "true_positive"),
                         "false_positive": sum(1 for c in classified if c.get("classification") == "false_positive"),
                     }, "fixture_ids": [c.get("alert_id") for c in classified]},
-                    profile, [str(args.rule), args.classified_alerts],
+                    profile, _input_files(args, profile, [str(args.rule), args.classified_alerts]),
                     change_diff=tuned["change_diff"], workflow="TUNE")
     print(json.dumps({"status": validation.get("status"), "tests": tests.get("status"),
                       "exception_scope": tuned["exception_scope"], "out": result["out_dir"]}, indent=2))
-    return 0
+    return 3 if tests.get("status") == "failed" else (0 if validation.get("status") in ("passed", "static_lint_only") else 1)
 
 
 def main(argv=None) -> int:
@@ -91,6 +102,7 @@ def main(argv=None) -> int:
     c.add_argument("--expectations", default=None, help="JSON: [{capture, must_fire[], must_not_fire[]}]")
     c.add_argument("--deployment-ruleset", default=None, help="existing ruleset for overlap testing")
     c.add_argument("--out", required=True)
+    c.add_argument("--validation-mode", choices=["auto", "container", "static"], default="auto")
     c.set_defaults(func=cmd_create)
 
     t = sub.add_parser("tune", help="TUNE workflow")
@@ -100,6 +112,8 @@ def main(argv=None) -> int:
     t.add_argument("--captures", nargs="*", default=[])
     t.add_argument("--expectations", default=None)
     t.add_argument("--out", required=True)
+    t.add_argument("--validation-mode", choices=["auto", "container", "static"], default="auto")
+    t.add_argument("--deployment-ruleset", default=None)
     t.set_defaults(func=cmd_tune)
 
     args = p.parse_args(argv)

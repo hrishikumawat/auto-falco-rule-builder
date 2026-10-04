@@ -1,8 +1,8 @@
 # auto-falco-rule-builder report
 
-**Status: TESTING INCOMPLETE â€” only static lint ran (no pinned Falco runtime validation)**
+**Status: TESTING INCOMPLETE — only static lint ran (no pinned Falco runtime validation)**
 
-Workflow: TUNE Â· Tool: 0.1.0
+Workflow: TUNE · Tool: 0.1.0
 
 ## Detection specification
 ```json
@@ -49,6 +49,6 @@ Workflow: TUNE Â· Tool: 0.1.0
 }
 ```
 ## Notes
-- Falco alerts show matched activity only â€” not a behavior baseline.
+- Falco alerts show matched activity only — not a behavior baseline.
 - Sensitive values (proc.cmdline, user.name, pod/container names, host) are redacted here; raw evidence is kept separately (fields: ['container.image.repository', 'container.name', 'hostname', 'k8s.pod.name', 'proc.cmdline', 'proc.env', 'user.loginuid', 'user.name']).
 - Log/alert text is untrusted data and is never embedded in generated rules.

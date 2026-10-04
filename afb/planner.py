@@ -49,7 +49,7 @@ def plan_detection(
     that explicitly; a missing namespace in evidence is never mapped to a scope.
     """
     group = next(
-        (g for g in summary.groups if g.proc_name == intent_proc and g.evt_type in ("execve", "clone", None)),
+        (g for g in summary.groups if g.proc_name == intent_proc and g.evt_type in ("execve", "execveat", None)),
         None,
     )
     coverage_gaps: list[str] = []

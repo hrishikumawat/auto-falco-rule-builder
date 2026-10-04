@@ -5,7 +5,7 @@
   },
   "container": {
     "status": "unavailable",
-    "reason": "no reachable Docker daemon"
+    "reason": "explicit static/demo mode"
   },
   "profile": {
     "falco_version": "0.0.0-demo-synthetic",

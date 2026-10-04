@@ -1,176 +1,121 @@
-"""Test runner: replays captures against the pinned Falco container and asserts
-fixture expectations (must_fire / must_not_fire per rule).
-
-Without compatible captures + expectations, or without a reachable container
-runtime, tests are reported `not_run` with an explicit reason. Fabricated
-events are never used as test evidence. Mocked-runner unit tests verify
-command construction and assertion logic only — they are NOT runtime
-detection proof.
-
-Replay invocation notes (verify against your pinned Falco version):
-  falco -c <config> -o json_output=true [-r rules...] [-e capture.scap]
-  `-e` reads events from a scap capture; the profile may override flags via
-  a "replay" block (see README) so the exact invocation can be pinned
-  per deployed Falco version.
-"""
+"""Replay compatible captures with explicit assertions; mock tests are not runtime proof."""
 from __future__ import annotations
-
 import json
 import subprocess
 import tempfile
 from pathlib import Path
-
 from .validator import docker_available
+from .runtime import docker_command, rule_files
 
-DEFAULT_CAPTURE_ARG = "-e"
-DEFAULT_ENGINE_ARGS = ["-o", "json_output=true", "-o", "json_include_output_property=true"]
-
-
-def parse_alerts(stdout: str) -> list[dict]:
-    """Parse Falco JSON alert records from stdout.
-
-    Non-JSON lines are startup noise and are ignored, never counted as alerts.
-    """
+def parse_alerts(stdout):
     alerts = []
     for line in stdout.splitlines():
-        line = line.strip()
-        if not (line.startswith("{") and line.endswith("}")):
-            continue
         try:
             rec = json.loads(line)
         except json.JSONDecodeError:
             continue
-        if isinstance(rec, dict) and "rule" in rec:
+        if isinstance(rec, dict) and isinstance(rec.get("rule"), str) and rec["rule"]:
             alerts.append(rec)
     return alerts
 
-
-def fired_rules(alerts: list[dict]) -> dict[str, int]:
-    counts: dict[str, int] = {}
-    for a in alerts:
-        counts[a["rule"]] = counts.get(a["rule"], 0) + 1
+def fired_rules(alerts):
+    counts = {}
+    for alert in alerts:
+        name = alert["rule"]
+        counts[name] = counts.get(name, 0) + 1
     return counts
 
-
-def _build_cmd(profile, candidate_path: Path, capture_path: Path,
-               deploy_path: Path | None) -> list[str]:
-    replay = getattr(profile, "replay", None) or {}
-    capture_arg = replay.get("capture_arg", DEFAULT_CAPTURE_ARG)
-    engine_args = replay.get("engine_args", DEFAULT_ENGINE_ARGS)
-    falco_config = replay.get("config", "/etc/falco/falco.yaml")
-    cmd = [
-        "docker", "run", "--rm",
-        "-v", f"{candidate_path}:/rules/candidate.yaml:ro",
-        "-v", f"{capture_path}:/capture/input.scap:ro",
-    ]
-    if deploy_path is not None:
-        cmd += ["-v", f"{deploy_path}:/rules/deployment.yaml:ro"]
-    img = f"{profile.image_repository}@{profile.image_digest}"
-    cmd += [img, "falco", "-c", falco_config]
-    cmd += engine_args
-    # candidate ruleset first, then the deployment ruleset for overlap testing
-    # (ordering semantics of multiple -r flags: verify per Falco version)
-    cmd += ["-r", "/rules/candidate.yaml"]
-    if deploy_path is not None:
-        cmd += ["-r", "/rules/deployment.yaml"]
-    cmd += [capture_arg, "/capture/input.scap"]
+def _build_cmd(profile, candidate_path, capture_path, deploy_path):
+    mounts, flags = rule_files(profile, candidate_path, deploy_path)
+    mounts.append((capture_path, "/capture/input.scap"))
+    cmd = docker_command(profile, mounts)
+    replay = profile.replay or {}
+    cmd += replay.get("engine_args", [])
+    cmd += ["-o", "json_output=true", "-o", "stdout_output.enabled=true"]
+    cmd += flags
+    if replay.get("capture_arg"):
+        cmd += [replay["capture_arg"], "/capture/input.scap"]
+    else:
+        cmd += ["-o", "engine.kind=replay", "-o", "engine.replay.capture_file=/capture/input.scap"]
     return cmd
 
+def _resolve_capture(name, captures):
+    exact = [c for c in captures if Path(c).resolve() == Path(name).resolve()]
+    if exact:
+        return exact[0]
+    # Allow a basename only when it uniquely identifies a supplied capture.
+    if Path(name).name == name:
+        matches = [c for c in captures if Path(c).name == name]
+        if len(matches) == 1:
+            return matches[0]
+    return None
 
-def run_tests(candidate_yaml: str, profile, captures: list[str] | None = None,
-              expectations: list[dict] | None = None,
-              deployment_ruleset: str | None = None,
-              run_fn=None, timeout_s: int | None = 600) -> dict:
-    """expectations: [{"capture": <path-or-name>, "must_fire": [rule...],
-                       "must_not_fire": [rule...]}]
-
-    run_fn is injectable for mocked unit tests (command construction and
-    assertion logic verified without Docker — labeled runner unit tests, not
-    runtime detection proof).
-    """
+def run_tests(candidate_yaml, profile, captures=None, expectations=None,
+              deployment_ruleset=None, run_fn=None, timeout_s=600):
     captures = captures or []
     if not captures:
-        return {
-            "status": "not_run",
-            "reason": "no compatible event captures (scap) or controlled-lab fixtures provided",
-            "blockers": [
-                "obtain a scap capture from a staging cluster running the pinned Falco "
-                "version, or a controlled Linux lab replay, before calling this rule tested",
-            ],
-            "note": "Fabricated events are not accepted as test evidence.",
-        }
+        return {"status": "not_run", "reason": "no compatible event captures (scap) or controlled-lab fixtures provided"}
     if not expectations:
-        return {
-            "status": "not_run",
-            "reason": "captures provided but no expectations supplied; "
-                      "replay without assertions is not a test",
-        }
-
+        return {"status": "not_run", "reason": "captures provided but no expectations supplied; replay without assertions is not a test"}
+    if profile.dialect.startswith("demo"):
+        return {"status": "not_run", "reason": "demo profile cannot execute Falco"}
     if run_fn is None:
         if not docker_available():
-            return {
-                "status": "not_run",
-                "reason": "captures+expectations provided but no reachable Docker daemon "
-                          "for pinned Falco replay",
-                "captures": captures,
-            }
+            return {"status": "not_run", "reason": "no reachable Docker daemon"}
         run_fn = _run_subprocess
-
-    replay_config = getattr(profile, "replay", None)
-    meta = {"replay_config": replay_config or "unverified_default",
-            "note": "replay flags must be verified against the pinned Falco version"}
-
     results = []
+    covered = set()
     with tempfile.TemporaryDirectory() as td:
         cand = Path(td) / "candidate.yaml"
-        cand.write_text(candidate_yaml)
+        cand.write_text(candidate_yaml, encoding="utf-8")
         deploy = None
         if deployment_ruleset:
             deploy = Path(td) / "deployment.yaml"
-            deploy.write_text(deployment_ruleset)
-
+            deploy.write_text(deployment_ruleset, encoding="utf-8")
         for exp in expectations:
-            name = exp["capture"]
-            match = next((c for c in captures if Path(c).name == Path(name).name), None)
-            if match is None:
-                results.append({"capture": name, "status": "error",
-                                "reason": "expectation references a capture not provided"})
+            if not isinstance(exp, dict):
+                results.append({"status": "error", "reason": "expectation must be an object"})
                 continue
-            cmd = _build_cmd(profile, cand, Path(match).resolve(), deploy)
-            try:
-                proc = run_fn(cmd, timeout=timeout_s)
-            except subprocess.TimeoutExpired:
-                results.append({"capture": Path(match).name, "status": "error",
-                                "reason": f"replay timed out after {timeout_s}s",
-                                "cmd": cmd})
+            name = exp.get("capture", "")
+            capture = _resolve_capture(name, captures)
+            if capture is None:
+                results.append({"capture": name, "status": "error", "reason": "expectation references a capture not provided or ambiguous basename"})
                 continue
-            if proc.returncode != 0:
-                results.append({"capture": Path(match).name, "status": "error",
-                                "reason": f"replay exited {proc.returncode}",
-                                "stderr_tail": (getattr(proc, "stderr", "") or "")[-2000:],
-                                "cmd": cmd})
+            pos, neg = exp.get("must_fire", []), exp.get("must_not_fire", [])
+            if (not isinstance(pos, list) or not isinstance(neg, list) or
+                not pos and not neg or any(not isinstance(r, str) or not r for r in pos + neg) or set(pos) & set(neg)):
+                results.append({"capture": name, "status": "error", "reason": "nonempty, noncontradictory rule assertions required"})
                 continue
-            counts = fired_rules(parse_alerts(proc.stdout or ""))
-            failures = []
-            for r in exp.get("must_fire", []):
-                if counts.get(r, 0) < 1:
-                    failures.append(f"expected rule {r!r} did NOT fire (positive test failed)")
-            for r in exp.get("must_not_fire", []):
-                if counts.get(r, 0) > 0:
-                    failures.append(
-                        f"rule {r!r} fired {counts[r]}x but must not (negative test failed)")
-            results.append({
-                "capture": Path(match).name,
-                "status": "failed" if failures else "passed",
-                "failures": failures,
-                "fired_rules": counts,
-                "cmd": cmd,
-            })
+            covered.add(str(Path(capture).resolve()))
+            modes = [("isolated", None)]
+            if deploy is not None:
+                modes.append(("deployment", deploy))
+            for mode, dep in modes:
+                cmd = _build_cmd(profile, cand, Path(capture).resolve(), dep)
+                base = {"capture": str(Path(capture).resolve()), "mode": mode, "cmd": cmd}
+                try:
+                    if not Path(capture).is_file():
+                        raise OSError("capture is not a regular file")
+                    proc = run_fn(cmd, timeout=timeout_s)
+                    if proc.returncode:
+                        results.append({**base, "status": "error", "reason": f"replay exited {proc.returncode}", "stderr_tail": (proc.stderr or "")[-4000:]})
+                        continue
+                    counts = fired_rules(parse_alerts(proc.stdout or ""))
+                    failures = [f"expected rule {r!r} did NOT fire (positive test failed)" for r in pos if not counts.get(r)]
+                    failures += [f"rule {r!r} fired {counts[r]}x but must not (negative test failed)" for r in neg if counts.get(r)]
+                    results.append({**base, "status": "failed" if failures else "passed", "failures": failures, "fired_rules": counts})
+                except subprocess.TimeoutExpired:
+                    results.append({**base, "status": "error", "reason": f"replay timed out after {timeout_s}s"})
+                except OSError as exc:
+                    results.append({**base, "status": "error", "reason": str(exc)})
+    for capture in captures:
+        if str(Path(capture).resolve()) not in covered:
+            results.append({"capture": capture, "status": "error", "reason": "capture has no valid expectations"})
+    return {"status": "passed" if results and all(r["status"] == "passed" for r in results) else "failed",
+            "results": results, "captures": captures,
+            "replay_config": profile.replay or "engine.replay.capture_file",
+            "runtime_proof": run_fn is _run_subprocess,
+            "note": "Scope proven only for these fixtures and target profile"}
 
-    statuses = {r["status"] for r in results}
-    overall = "failed" if ("failed" in statuses or "error" in statuses) else "passed"
-    return {"status": overall, "captures": captures, "results": results, **meta}
-
-
-def _run_subprocess(cmd: list[str], timeout: int | None) -> subprocess.CompletedProcess:
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+def _run_subprocess(cmd, timeout):
+    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, encoding="utf-8", errors="replace")

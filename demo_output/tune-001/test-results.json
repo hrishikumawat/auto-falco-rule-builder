@@ -1,8 +1,32 @@
 {
   "status": "not_run",
   "reason": "no compatible event captures (scap) or controlled-lab fixtures provided",
-  "blockers": [
-    "obtain a scap capture from a staging cluster running the pinned Falco version, or a controlled Linux lab replay, before calling this rule tested"
-  ],
-  "note": "Fabricated events are not accepted as test evidence."
+  "regression_expectations": {
+    "preserved_positives": [
+      {
+        "output_fields": {
+          "proc.name": "nsenter",
+          "k8s.ns.name": "prod",
+          "container.image.repository": "registry.internal/app"
+        },
+        "must_fire": true
+      }
+    ],
+    "suppressed_negatives": [
+      {
+        "output_fields": {
+          "proc.name": "nsenter",
+          "k8s.ns.name": "prod"
+        },
+        "must_fire": false
+      },
+      {
+        "output_fields": {
+          "proc.name": "nsenter",
+          "k8s.ns.name": "prod"
+        },
+        "must_fire": false
+      }
+    ]
+  }
 }

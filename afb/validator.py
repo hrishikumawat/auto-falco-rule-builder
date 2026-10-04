@@ -1,7 +1,7 @@
 """Validator: pinned-container Falco validation preferred, static lint fallback.
 
 Runtime mode requires a reachable Docker daemon and a profile with an image
-digest. If unavailable, the report says so — YAML validation alone is never
+digest. If unavailable, the report says so â€” YAML validation alone is never
 presented as proof of runtime detection.
 """
 from __future__ import annotations
@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
+from .runtime import docker_command, rule_files
 
 import yaml
 
@@ -82,7 +83,7 @@ def _identifiers(condition: str) -> set[str]:
     """Extract bare identifiers (possible macro refs) from a condition.
 
     Value lists following `in` (e.g. `evt.type in (execve, execveat)`) are
-    values, not macro references — strip them before scanning.
+    values, not macro references â€” strip them before scanning.
     """
     import re
     condition = re.sub(r"\bin\s*\([^)]*\)", "", condition)
@@ -102,15 +103,32 @@ def validate(candidate_yaml: str, profile, mode: str = "auto") -> dict:
         "falco_version": profile.falco_version,
         "image": f"{profile.image_repository}@{profile.image_digest}",
     }}
-    static_errors = _static_lint(candidate_yaml)
+    dependency_docs = []
+    for dep in profile.rules_files or []:
+        loaded = yaml.safe_load(Path(dep).read_text(encoding="utf-8"))
+        if not isinstance(loaded, list):
+            raise ValueError(f"dependency is not a rules list: {dep}")
+        dependency_docs.extend(loaded)
+    if dependency_docs:
+        loaded = yaml.safe_load(candidate_yaml)
+        static_text = yaml.safe_dump(dependency_docs + loaded) if isinstance(loaded, list) else candidate_yaml
+    else:
+        static_text = candidate_yaml
+    static_errors = _static_lint(static_text)
     result["static_lint"] = {"status": "passed" if not static_errors else "failed", "errors": static_errors}
-    if static_errors and mode == "auto":
+    if static_errors:
         result["status"] = "failed"
         return result
 
+    if profile.dialect.startswith("demo"):
+        if mode == "container":
+            result["status"] = "failed"
+            result["container"] = {"status": "failed", "reason": "demo profile cannot execute Falco"}
+            return result
+        mode = "static"
     use_container = mode == "container" or (mode == "auto" and docker_available())
     if not use_container:
-        result["container"] = {"status": "unavailable", "reason": "no reachable Docker daemon"}
+        result["container"] = {"status": "unavailable", "reason": "explicit static/demo mode" if mode == "static" else "no reachable Docker daemon"}
         result["status"] = "static_lint_only"
         result["note"] = (
             "Runtime validation NOT performed. YAML validation alone is not proof "
@@ -119,12 +137,13 @@ def validate(candidate_yaml: str, profile, mode: str = "auto") -> dict:
         return result
 
     img = f"{profile.image_repository}@{profile.image_digest}"
-    with tempfile.NamedTemporaryFile("w", suffix=".yaml", delete=False) as f:
+    with tempfile.NamedTemporaryFile("w", suffix=".yaml", delete=False, encoding="utf-8") as f:
         f.write(candidate_yaml)
         tmp = f.name
     try:
+        mounts, flags = rule_files(profile, Path(tmp), validate=True)
         proc = subprocess.run(
-            ["docker", "run", "--rm", "-v", f"{tmp}:/rules.yaml:ro", img, "falco", "-V", "/rules.yaml"],
+            docker_command(profile, mounts) + flags,
             capture_output=True, text=True, timeout=300,
         )
         if proc.returncode == 0:
@@ -133,6 +152,9 @@ def validate(candidate_yaml: str, profile, mode: str = "auto") -> dict:
         else:
             result["container"] = {"status": "failed", "image": img, "stderr": proc.stderr[-4000:]}
             result["status"] = "failed"
+    except (subprocess.SubprocessError, OSError) as exc:
+        result["status"] = "failed"
+        result["container"] = {"status": "error", "reason": str(exc)}
     finally:
         Path(tmp).unlink(missing_ok=True)
     return result

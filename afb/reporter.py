@@ -16,15 +16,19 @@ def _sha256_text(t: str) -> str:
 
 def _status_line(validation: dict, tests: dict) -> str:
     v, t = validation.get("status"), tests.get("status")
-    if v == "passed" and t == "ran":
-        return "READY FOR REVIEW — validated in pinned Falco and replay-tested"
+    if v == "passed" and t == "passed" and tests.get("runtime_proof") is True:
+        return "READY FOR REVIEW â€” validated in pinned Falco and replay-tested"
+    if t == "failed":
+        return "FAILED TESTS â€” candidate did not pass replay assertions"
+    if v == "passed" and t == "passed":
+        return "TESTING INCOMPLETE â€” mock assertions are not runtime proof"
     if v == "passed" and t == "not_run":
-        return "VALIDATED / TESTING INCOMPLETE — engine validation passed, runtime tests not run"
+        return "VALIDATED / TESTING INCOMPLETE â€” engine validation passed, runtime tests not run"
     if v == "static_lint_only":
-        return "TESTING INCOMPLETE — only static lint ran (no pinned Falco runtime validation)"
+        return "TESTING INCOMPLETE â€” only static lint ran (no pinned Falco runtime validation)"
     if v == "failed":
-        return "FAILED VALIDATION — do not review"
-    return "UNKNOWN STATE"
+        return "FAILED VALIDATION â€” do not review"
+    return "TESTING INCOMPLETE â€” no successful runtime validation and replay"
 
 
 def export(out_dir, spec, candidate_yaml: str, validation: dict, tests: dict,
@@ -50,7 +54,7 @@ def export(out_dir, spec, candidate_yaml: str, validation: dict, tests: dict,
             "image": f"{profile.image_repository}@{profile.image_digest}",
         },
         "inputs": [
-            {"path": p, "sha256": _sha256_text(Path(p).read_text())} for p in inputs
+            {"path": p, "sha256": hashlib.sha256(Path(p).read_bytes()).hexdigest()} for p in inputs
         ],
         "outputs": {
             "candidate.yaml": _sha256_text(candidate_yaml),
@@ -66,7 +70,7 @@ def export(out_dir, spec, candidate_yaml: str, validation: dict, tests: dict,
         "",
         f"**Status: {_status_line(validation, tests)}**",
         "",
-        f"Workflow: {workflow} · Tool: {__version__}",
+        f"Workflow: {workflow} Â· Tool: {__version__}",
         "",
         "## Detection specification",
         "```json",
@@ -91,7 +95,7 @@ def export(out_dir, spec, candidate_yaml: str, validation: dict, tests: dict,
         json.dumps(evidence_summary, indent=2),
         "```",
         "## Notes",
-        "- Falco alerts show matched activity only — not a behavior baseline.",
+        "- Falco alerts show matched activity only â€” not a behavior baseline.",
         "- Sensitive values (proc.cmdline, user.name, pod/container names, host) are "
         f"redacted here; raw evidence is kept separately (fields: {sorted(REDACTABLE_FIELDS)}).",
         "- Log/alert text is untrusted data and is never embedded in generated rules.",

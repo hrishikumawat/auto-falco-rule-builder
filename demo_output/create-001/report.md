@@ -1,8 +1,8 @@
 # auto-falco-rule-builder report
 
-**Status: TESTING INCOMPLETE — only static lint ran (no pinned Falco runtime validation)**
+**Status: TESTING INCOMPLETE � only static lint ran (no pinned Falco runtime validation)**
 
-Workflow: CREATE · Tool: 0.1.0
+Workflow: CREATE � Tool: 0.1.0
 
 ## Detection specification
 ```json
@@ -31,7 +31,7 @@ Workflow: CREATE · Tool: 0.1.0
   ],
   "source_evidence": [
     {
-      "source": "examples/nsenter_alerts.json",
+      "source": "examples\\nsenter_alerts.json",
       "index": 0,
       "record_sha256": "2c8876d422b18a704811f6e5ebba36fc75ddabee32c6065bda3f95b802f62a2c"
     }
@@ -64,7 +64,7 @@ Workflow: CREATE · Tool: 0.1.0
       },
       "count": 7,
       "sample_provenance": {
-        "source": "examples/nsenter_alerts.json",
+        "source": "examples\\nsenter_alerts.json",
         "index": 0,
         "record_sha256": "2c8876d422b18a704811f6e5ebba36fc75ddabee32c6065bda3f95b802f62a2c"
       }
@@ -77,7 +77,7 @@ Workflow: CREATE · Tool: 0.1.0
       },
       "count": 1,
       "sample_provenance": {
-        "source": "examples/nsenter_alerts.json",
+        "source": "examples\\nsenter_alerts.json",
         "index": 4,
         "record_sha256": "a5427b417cec396da26c4cbce34626ecc59807a68342d94cf4dad5b3f016e6c3"
       }
@@ -87,6 +87,6 @@ Workflow: CREATE · Tool: 0.1.0
 }
 ```
 ## Notes
-- Falco alerts show matched activity only — not a behavior baseline.
+- Falco alerts show matched activity only � not a behavior baseline.
 - Sensitive values (proc.cmdline, user.name, pod/container names, host) are redacted here; raw evidence is kept separately (fields: ['container.image.repository', 'container.name', 'hostname', 'k8s.pod.name', 'proc.cmdline', 'proc.env', 'user.loginuid', 'user.name']).
 - Log/alert text is untrusted data and is never embedded in generated rules.

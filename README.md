@@ -57,7 +57,7 @@ uv venv .venv && uv pip install --python .venv/bin/python -e . pytest
 ## Docker-free demo
 
 ```bash
-./scripts/demo_docker_free.sh
+python scripts/demo_docker_free.py
 ```
 Runs CREATE + TUNE end-to-end on synthetic fixtures with a labeled demo
 profile (not a real deployment). Outputs land in `demo_output/` and are
@@ -72,14 +72,37 @@ Needs a scap capture + expectations JSON
 ```bash
 python -m afb.cli create ... --captures *.scap --expectations expectations.json
 ```
-Replay flags default to `falco -c ... -o json_output=true -r candidate.yaml
-[-r deployment.yaml] -e capture.scap`; override per deployed version via a
-profile `"replay"` block — otherwise the invocation is recorded in
-`test-results.json` as `unverified_default`. Real integration tests use
-curated or controlled-lab captures; production telemetry is not required for
-development progress. Mocked runner unit tests (tests/test_runner_mocked.py)
-verify command construction and assertion logic without Docker and are
-labeled as NOT runtime detection proof.
+Replay uses a pinned image, `/usr/bin/falco` as entrypoint, network disabled, and
+`-o engine.kind=replay -o engine.replay.capture_file=/capture/input.scap`.
+The invocation was exercised with Falco 0.45.0. Legacy flags can be configured
+in the profile replay block; they must be checked for your target version.
+Dependencies listed in profile `rules_files` (relative to the profile file) load
+before the deployment ruleset and candidate. Optional `config_file` and
+`runtime_args` apply equally to validation and replay; use them to configure
+plugins installed in the target image. Specifying `--deployment-ruleset` runs
+both isolated and combined replay to reveal overlaps.
+
+Each supplied capture must have nonempty, noncontradictory expectations.
+Replay failures return exit code 3 in both workflows; validation failures return
+1; input/configuration errors return 2. TUNE exports analyst-derived regression
+expectations, but these are not automatically converted into real capture fixtures.
+
+## Reproducible real replay check
+
+```powershell
+# Windows, from the repository directory
+.\.venv\Scripts\python.exe -m pytest tests -q
+.\.venv\Scripts\python.exe scripts/replay_integration.py
+```
+
+The integration script downloads an official Falco libs capture at a fixed commit
+and uses Falco 0.45.0 pinned by digest. Docker may pull the image on first run.
+It validates and replays a generated curl rule (positive), an absent process rule
+(negative), and a tuned exception suppressing curl. It also intentionally supplies
+wrong positive and negative expectations to prove the harness detects failures.
+The fixture is a host capture: it does **not** prove Kubernetes namespace-scoped
+nsenter detection. Results and capture provenance are written to `local_run/replay`.
+Review `docs/replay-validation.md` for the recorded run and remaining limits.
 
 ## Limitations (explicit)
 

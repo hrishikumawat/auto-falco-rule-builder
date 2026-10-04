@@ -54,11 +54,12 @@ def test_command_construction_mounts_and_order(tmp_path):
     assert any(m.endswith("/rules/candidate.yaml:ro") for m in mounts)
     assert any(m.endswith("/capture/input.scap:ro") for m in mounts)
     assert any(m.endswith("/rules/deployment.yaml:ro") for m in mounts)
-    assert cmd[cmd.index("-r") + 1] == "/rules/candidate.yaml"
-    assert cmd[cmd.index("falco") + 1:cmd.index("falco") + 3] == ["-c", "/etc/falco/falco.yaml"]
+    assert cmd[cmd.index("-r") + 1] == "/rules/deployment.yaml"
+    assert cmd[cmd.index("-c") + 1] == "/etc/falco/falco.yaml"
+    assert "--entrypoint" in cmd and "/usr/bin/falco" in cmd
     assert "-o" in cmd and "json_output=true" in cmd
     # capture arg is last two tokens, after -r flags
-    assert cmd[-2] == "-e" and cmd[-1] == "/capture/input.scap"
+    assert cmd[-2:] == ["-o", "engine.replay.capture_file=/capture/input.scap"]
 
 
 def test_command_uses_profile_replay_overrides(tmp_path):

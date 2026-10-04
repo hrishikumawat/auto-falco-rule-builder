@@ -20,6 +20,9 @@ class TargetProfile:
     plugins: list[dict]
     dialect: str
     replay: dict | None = None
+    rules_files: list[str] | None = None
+    config_file: str | None = None
+    runtime_args: list[str] | None = None
 
     def field_supported(self, field_name: str) -> bool:
         return field_name in self.supported_fields
@@ -48,4 +51,7 @@ def load_profile(path: str | Path) -> TargetProfile:
         plugins=list(data["plugins"]),
         dialect=data.get("dialect", "example"),
         replay=data.get("replay"),
+        rules_files=[str((Path(path).resolve().parent / f).resolve()) for f in data.get("rules_files", [])],
+        config_file=str((Path(path).resolve().parent / data["config_file"]).resolve()) if data.get("config_file") else None,
+        runtime_args=data.get("runtime_args", []),
     )

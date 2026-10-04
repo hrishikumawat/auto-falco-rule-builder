@@ -9,13 +9,19 @@ import yaml
 
 
 def generate_rule(spec, profile=None) -> list[dict]:
+    if profile is not None:
+        unsupported = [field for field in spec.required_fields if not profile.field_supported(field)]
+        if unsupported:
+            raise ValueError(f"required fields unsupported by target: {unsupported}")
     match = spec.match
     proc = match["proc.name"]
     evt = match.get("evt.type", "execve")
 
-    cond_parts = ["spawned_process", f'proc.name = "{proc}"']
+    import json
+    quote = lambda value: json.dumps(str(value), ensure_ascii=True)
+    cond_parts = [f"proc.name = {quote(proc)}"]
     for fld, vals in match.get("scope", {}).items():
-        quoted = ", ".join(f'"{v}"' for v in vals)
+        quoted = ", ".join(quote(v) for v in vals)
         cond_parts.append(f"{fld} in ({quoted})")
     condition = " and ".join(cond_parts)
 
@@ -30,7 +36,7 @@ def generate_rule(spec, profile=None) -> list[dict]:
     rule_doc = [
         {
             "macro": "afb_spawned_process",
-            "condition": "evt.type in (execve, execveat) and evt.dir = <",
+            "condition": "evt.type in (execve, execveat) and evt.dir = < and evt.rawres >= 0",
         },
         {
             "rule": rule_name,

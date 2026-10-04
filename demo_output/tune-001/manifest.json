@@ -1,7 +1,7 @@
 {
   "tool_version": "0.1.0",
   "workflow": "TUNE",
-  "generated_at_utc": "2026-10-04T04:19:52.832027+00:00",
+  "generated_at_utc": "2026-10-04T04:45:42.568038+00:00",
   "profile": {
     "name": "DEMO - NOT a real deployment profile (synthetic digest and fields)",
     "falco_version": "0.0.0-demo-synthetic",

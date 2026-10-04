@@ -23,7 +23,7 @@
   ],
   "source_evidence": [
     {
-      "source": "examples/nsenter_alerts.json",
+      "source": "examples\\nsenter_alerts.json",
       "index": 0,
       "record_sha256": "2c8876d422b18a704811f6e5ebba36fc75ddabee32c6065bda3f95b802f62a2c"
     }
