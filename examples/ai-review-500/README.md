@@ -64,7 +64,7 @@ the fabricated alerts and separate answer key; it is not a Falco interpreter or
 runtime detection test. A correct accepted session removes 400 noise events,
 hides zero suspicious events, and retains 100 alerts.
 
-## Observed smoke test
+## Initial proposal-only smoke test
 
 On 2026-10-04, local `qwen3.5:0.8b` produced ten proposals. Eight matched the
 intended scope. Health Check and Backup Archive instead selected the five

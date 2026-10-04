@@ -44,6 +44,34 @@ Choose:
 - `f`: explain what should change; the model revises the proposal.
 - `q`: stop; already accepted proposals remain exported.
 
+Before proposing an exception, Qwen assesses each distinct observed alert group:
+
+- **Keep alerting**: suspicious, unauthorized, or explicitly must-detect activity.
+- **Likely noise**: activity it believes your workload context authorizes.
+- **Uncertain — keep alerting**: insufficient authorization information.
+
+Each group has a reason and alert count, plus totals for the current rule.
+AI assessment runs separately from rule planning, with one local model call per
+group. It can take longer than the previous proposal-only workflow. Only groups
+assessed as noise are eligible for a proposed exception. Keep and uncertain
+groups cannot be selected. With no noise groups, no exception is generated;
+uncertainty prompts a clarification instead. Feedback triggers reassessment.
+Assessments are hypotheses, not ground truth: Qwen can mislabel suspicious
+activity as noise. Verify them against your workload authorization policy.
+The labels do not establish that activity is safe or that compromise occurred.
+
+For multiple rules, you may put one policy per line as `Exact rule name: policy`.
+When every discovered rule has such a line, each rule receives its own policy
+plus all unprefixed global notes. Incomplete or free-form context is passed
+through in full. This keeps the small local model focused without changing
+your authorization policy. The 500-alert example uses this complete format.
+
+Completed, checked assessments, reasons, counts, field values and evidence IDs
+are saved in `session.json`, including rules without a proposal. An incomplete
+model call is recorded as an error and cannot approve a change.
+Proposals also contain an `assessments` section in `proposal.json`. All unselected
+groups remain unexcepted by the proposed change, including unselected noise.
+
 There is no default approval. Enter alone does not accept. When authorization
 is unclear, the model can ask a question; Enter skips that rule. There are at
 most three model attempts per rule, including feedback and invalid responses.
@@ -152,3 +180,11 @@ For a larger exercise, use the [500-alert, 10-rule noise lab](../examples/ai-rev
 It includes suspicious lookalikes, separate ground truth and a scorer for
 accepted decisions. Its target is 400 noise events removed with 100 suspicious
 events preserved; review every proposal rather than assuming that result.
+
+With the assessment stage added, the 2026-10-04 final 500-alert smoke test
+completed all ten rules. Qwen proposed eight exceptions, all matching intended
+noise scopes and passing pinned Falco validation. Two rules received no proposal.
+Several group labels were still wrong: some wrong-parent events were labeled
+noise, and two authorized workloads were labeled keep. No proposals were
+accepted. This demonstrates the workflow and its review controls, not reliable
+automatic classification. The updated 83-test suite passed.

@@ -6,7 +6,7 @@ from unittest.mock import patch
 import pytest
 import yaml
 
-from afb.ai_review import Ollama, check_proposal, compile_change, discover_rules, group_records, review, safe_text
+from afb.ai_review import Ollama, check_proposal, compile_change, context_for_rule, discover_rules, group_records, review, safe_text
 from afb.validator import _static_lint
 
 
@@ -16,7 +16,9 @@ def record(command, user="svc", protected=False):
 
 
 def proposal(**changes):
-    result = {"decision": "propose", "group_ids": ["G001"], "scope_fields": ["proc.cmdline", "proc.pname", "user.name"],
+    result = {"assessments": [{"group_id": "G001", "status": "noise", "reason": "Authorized health job"},
+                              {"group_id": "G002", "status": "keep", "reason": "Unauthorized download"}],
+              "decision": "propose", "group_ids": ["G001"], "scope_fields": ["proc.cmdline", "proc.pname", "user.name"],
               "reason": "Approved health check", "blind_spot": "This exact activity is suppressed", "question": ""}
     result.update(changes)
     return result
@@ -39,7 +41,8 @@ def test_rejects_invalid_or_broad_proposals(changes):
 
 def test_blocks_known_positive():
     with pytest.raises(ValueError, match="must-detect"):
-        check_proposal(proposal(), group_records([record("health", protected=True)]))
+        check_proposal(proposal(assessments=[{"group_id": "G001", "status": "noise", "reason": "claim"}]),
+                       group_records([record("health", protected=True)]))
 
 
 def test_blocks_unselected_group_that_would_be_suppressed():
@@ -95,6 +98,9 @@ def test_accept_exports_only_after_review_and_sources_unchanged(tmp_path):
     def approve(_):
         text = '\n'.join(displayed)
         assert 'What you are approving:' in text
+        assert 'G001 | LIKELY NOISE | 1 alerts: Authorized health job' in text
+        assert 'G002 | KEEP ALERTING | 1 alerts: Unauthorized download' in text
+        assert text.index('AI alert assessment') < text.index('What you are approving')
         assert 'full command line is "health"' in text
         assert 'parent process name is "cron"' in text
         assert 'user account is "svc"' in text
@@ -113,6 +119,7 @@ def test_accept_exports_only_after_review_and_sources_unchanged(tmp_path):
     assert report["validation"]["status"] == "static_lint_only"
     assert report['approval_summary']['suppression_reason'] == 'Approved health check'
     assert report['approval_summary']['recorded_impact'] in '\n'.join(displayed)
+    assert report['assessments'][0]['evidence_ids'] == ['E00001']
 
 
 @pytest.mark.parametrize("choice", ["r", "q"])
@@ -254,3 +261,72 @@ def test_profile_does_not_reload_original_rule_beside_candidate(tmp_path):
     candidate, target, mode = validate.call_args.args
     assert target.rules_files == [str(dependency.resolve())]
     assert sum(e.get('rule') == 'Test' for e in yaml.safe_load(candidate)) == 1
+
+
+@pytest.mark.parametrize('status', ['keep', 'uncertain'])
+def test_cannot_suppress_group_assessed_keep_or_uncertain(status):
+    assessed = proposal()['assessments']
+    assessed[0]['status'] = status
+    with pytest.raises(ValueError, match='only groups assessed noise'):
+        check_proposal(proposal(assessments=assessed), group_records([record('health'), record('download')]))
+
+
+@pytest.mark.parametrize('assessments', [[],
+    [{'group_id': 'G001', 'status': 'noise', 'reason': 'authorized'}],
+    [{'group_id': 'G001', 'status': 'noise', 'reason': 'authorized'}, {'group_id': 'G001', 'status': 'keep', 'reason': 'duplicate'}],
+    [{'group_id': 'G001', 'status': 'noise', 'reason': 'authorized'}, {'group_id': 'invented', 'status': 'keep', 'reason': 'invented'}],
+    [{'group_id': 'G001', 'status': 'noise', 'reason': ''}, {'group_id': 'G002', 'status': 'keep', 'reason': 'bad'}],
+])
+def test_rejects_missing_duplicate_unknown_or_unexplained_assessments(assessments):
+    with pytest.raises(ValueError):
+        check_proposal(proposal(assessments=assessments), group_records([record('health'), record('download')]))
+
+
+def test_uncertain_no_proposal_asks_context_and_never_requests_approval(tmp_path):
+    args, rule = setup(tmp_path)
+    class Uncertain(Client):
+        def propose(self, packet):
+            return proposal(assessments=[{'group_id': g['id'], 'status': 'uncertain', 'reason': 'Unknown authorization'} for g in packet['groups']],
+                            decision='needs_context', group_ids=[], scope_fields=[], question='Is this job authorized?')
+    output = []
+    def skip(question):
+        assert 'Is this job authorized?' in question
+        assert 'UNCERTAIN - KEEP ALERTING' in '\n'.join(output)
+        return ''
+    review(args, input_fn=skip, output=output.append, client=Uncertain())
+    assert not (Path(args.out) / 'accepted-rules').exists()
+    session = json.loads((Path(args.out) / 'session.json').read_text())
+    assert len(session['model_attempts'][0]['checked_assessments']) == 2
+
+
+def test_local_ai_assesses_first_then_plans_only_from_noise():
+    client = Ollama.__new__(Ollama)
+    groups = [{'id': 'G001', 'fields': record('health')['fields'], 'must_detect': False},
+              {'id': 'G002', 'fields': record('download')['fields'], 'must_detect': False}]
+    packet = {'groups': groups, 'expected_activity': 'health authorized', 'feedback': []}
+    planned = {k: v for k, v in proposal().items() if k != 'assessments'}
+    with patch.object(client, 'chat', side_effect=[{'reason': 'Authorized health', 'authorization': 'authorized'},
+            {'reason': 'Unauthorized download', 'authorization': 'unauthorized'}, planned]) as chat:
+        result = client.propose(packet)
+    assert len(chat.call_args_list) == 3
+    planning_packet, schema, _ = chat.call_args_list[-1].args
+    assert [a['status'] for a in planning_packet['assessments']] == ['noise', 'keep']
+    assert schema['properties']['group_ids']['items']['enum'] == ['G001']
+    assert result['assessments'][1]['status'] == 'keep'
+
+
+def test_local_ai_does_not_generate_exception_if_no_noise_assessed():
+    client = Ollama.__new__(Ollama)
+    packet = {'groups': [{'id': 'G001', 'fields': {}, 'must_detect': False}], 'expected_activity': '', 'feedback': []}
+    with patch.object(client, 'chat', return_value={'reason': 'Unknown job', 'authorization': 'unknown'}) as chat:
+        result = client.propose(packet)
+    assert chat.call_count == 1
+    assert result['decision'] == 'needs_context'
+    assert result['group_ids'] == result['scope_fields'] == []
+
+
+def test_complete_per_rule_context_keeps_global_notes_and_focuses_current_policy():
+    context = 'Everything else must alert.\nFirst: authorize health.\nSecond: authorize backup.\n'
+    assert context_for_rule(context, 'First', ['First', 'Second']) == 'Everything else must alert.\nFirst: authorize health.'
+    partial = 'First: authorize health.\nOther instructions apply globally.'
+    assert context_for_rule(partial, 'Second', ['First', 'Second']) == partial
