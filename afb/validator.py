@@ -86,6 +86,8 @@ def _identifiers(condition: str) -> set[str]:
     values, not macro references â€” strip them before scanning.
     """
     import re
+    # Quoted Falco values (including escaped quotes) are not macro references.
+    condition = re.sub(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'', "", condition)
     condition = re.sub(r"\bin\s*\([^)]*\)", "", condition)
     toks = condition.replace("(", " ").replace(")", " ").replace(",", " ").split()
     out = set()

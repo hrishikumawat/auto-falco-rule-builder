@@ -1,8 +1,9 @@
 # auto-falco-rule-builder
 
-Builds and tunes Falco detection rules from evidence, deterministically.
-Milestone 1: no LLM. Every candidate is validated against a **pinned Falco
-image digest from your target profile** — never an assumed or host version.
+Builds and tunes Falco detection rules from evidence. CREATE and TUNE are
+deterministic; REVIEW uses local Ollama and asks for approval one rule at a time.
+Engine validation uses the **pinned Falco image digest from your target profile**.
+REVIEW without a profile is explicitly a static preview.
 
 ## Architecture and onboarding
 
@@ -14,6 +15,19 @@ image digest from your target profile** — never an assumed or host version.
 Download an HTML file and open it locally, or serve it on a static documentation host. GitHub's file view shows the HTML source. The builder exports candidate files; it does not update Helm or deploy rules automatically. Kubernetes namespace-specific replay is still unproven with the current host fixture.
 
 ## Workflows
+
+### REVIEW — raw alerts → local AI proposal → interactive approval
+
+```powershell
+.\.venv\Scripts\python.exe -u -m afb.cli review --rules-dir C:\my-falco\rules --logs C:\my-falco\alerts.jsonl
+```
+
+Uses `qwen3.5:0.8b` through local Ollama. Describe expected activity when prompted,
+then accept, reject or give feedback on each exact diff. Accepted changes are
+exported separately; original files remain unchanged. Add `--profile` for your
+target Falco engine and `--captures` / `--expectations` for real replay.
+See [the interactive review guide](docs/ai-review.md) for the runnable synthetic
+example, approval controls, outputs and verification limits.
 
 ### CREATE — alerts → candidate rule → review package
 ```bash
@@ -118,5 +132,6 @@ Review `docs/replay-validation.md` for the recorded run and remaining limits.
 - `proc.name` matching misses renamed binaries.
 - Alerts show matched activity only — not a behavior baseline; frequency is
   not safety.
-- Alert/log text is untrusted: sensitive values are redacted before any model
-  use; raw evidence stays separate.
+- Alert/log text is untrusted. REVIEW sends selected command/account/path values
+  to local Ollama, excluding raw output strings; it does not promise secret
+  redaction. Model proposals require explicit approval.

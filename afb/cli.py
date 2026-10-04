@@ -3,8 +3,9 @@
 
 CREATE: alerts -> detection spec -> candidate Falco YAML -> validation -> tests -> report.
 TUNE:   existing rule + classified alerts -> scoped exception -> diff -> regression expectations.
+REVIEW: rules directory + raw alerts -> local AI proposals -> interactive export approval.
 
-No LLM in milestone 1. No automatic deployment, ever.
+CREATE and TUNE are deterministic. REVIEW uses local Ollama. No automatic deployment.
 """
 from __future__ import annotations
 
@@ -115,6 +116,23 @@ def main(argv=None) -> int:
     t.add_argument("--validation-mode", choices=["auto", "container", "static"], default="auto")
     t.add_argument("--deployment-ruleset", default=None)
     t.set_defaults(func=cmd_tune)
+
+    from .ai_review import review
+    a = sub.add_parser("review", help="Interactive local-AI review of a rules directory and alert logs")
+    a.add_argument("--rules-dir", required=True, help="directory containing full Falco YAML rule definitions")
+    a.add_argument("--logs", required=True, help="Falco JSON/JSONL file or directory")
+    context = a.add_mutually_exclusive_group()
+    context.add_argument("--context", default=None, help="expected/authorized workload activity")
+    context.add_argument("--context-file", default=None)
+    a.add_argument("--profile", default=None, help="target profile; omit for static preview only")
+    a.add_argument("--model", default="qwen3.5:0.8b")
+    a.add_argument("--timeout", type=int, default=120)
+    a.add_argument("--out", default=None, help="new output directory; defaults to a timestamped directory")
+    a.add_argument("--rule-order", nargs="+", default=None, help="relative YAML paths in exact load order; defaults to sorted paths")
+    a.add_argument("--validation-mode", choices=["auto", "container", "static"], default="auto")
+    a.add_argument("--captures", nargs="*", default=[])
+    a.add_argument("--expectations", default=None)
+    a.set_defaults(func=review)
 
     args = p.parse_args(argv)
     try:

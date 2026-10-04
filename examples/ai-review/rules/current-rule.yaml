@@ -1,0 +1,11 @@
+# Synthetic lab scenario: broad curl execution detection.
+# This rule has not been validated or replay-tested as part of this scenario.
+- macro: lab_successful_exec
+  condition: evt.type in (execve, execveat) and evt.rawres >= 0
+
+- rule: Lab Curl Execution
+  desc: Illustrative noisy detection of successful curl execution
+  condition: lab_successful_exec and proc.name = "curl"
+  output: "Curl executed (command=%proc.cmdline parent=%proc.pname user=%user.name)"
+  priority: WARNING
+  tags: [lab, process]
