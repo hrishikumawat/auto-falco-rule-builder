@@ -1,0 +1,4 @@
+# Preserve the bytes used by diagram validation and publication review.
+docs/diagrams/*.html text eol=lf -whitespace
+docs/diagrams/*.archify.json text eol=lf
+scripts/audit_diagrams.mjs text eol=lf

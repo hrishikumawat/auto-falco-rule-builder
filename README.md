@@ -4,6 +4,15 @@ Builds and tunes Falco detection rules from evidence, deterministically.
 Milestone 1: no LLM. Every candidate is validated against a **pinned Falco
 image digest from your target profile** — never an assumed or host version.
 
+## Architecture and onboarding
+
+- [Builder components](docs/diagrams/builder-components.html): practical component map for an engineer using their own Falco deployment.
+- [Full workflow](docs/diagrams/full-flow.html): rule creation/tuning through the proposed organization review and rollout flow.
+- [Onboarding guide](docs/onboarding.md): input/profile preparation, validation/replay, and manual Helm custom-rule handoff.
+- [Diagram sources and publication review](docs/diagrams/README.md): regenerate the standalone HTML and review its security scope.
+
+Download an HTML file and open it locally, or serve it on a static documentation host. GitHub's file view shows the HTML source. The builder exports candidate files; it does not update Helm or deploy rules automatically. Kubernetes namespace-specific replay is still unproven with the current host fixture.
+
 ## Workflows
 
 ### CREATE — alerts → candidate rule → review package

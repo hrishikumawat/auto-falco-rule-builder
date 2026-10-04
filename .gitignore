@@ -6,3 +6,10 @@ out/
 
 *.egg-info/
 local_run/
+
+# Archify delivery provenance stays local; publish HTML and source JSON only.
+docs/diagrams/*.delivery.json
+docs/diagrams/*.delivery-pending.json
+docs/diagrams/*.browser-check.json
+docs/diagrams/*.finalize.json
+docs/diagrams/*.finalize-summary.json
