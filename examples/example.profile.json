@@ -1,0 +1,17 @@
+{
+  "name": "example-staging-profile",
+  "dialect": "example",
+  "_usage": "Copy to my-profile.json, set dialect to the real deployment dialect, fill in actual version/digest/fields. The loader REFUSES example dialects.",
+  "falco_version": "REPLACE_ME",
+  "image": {
+    "repository": "falcosecurity/falco",
+    "digest": "sha256:REPLACE_ME"
+  },
+  "supported_fields": [
+    "evt.type", "proc.name", "proc.cmdline", "proc.exepath", "user.name",
+    "k8s.ns.name", "k8s.pod.name", "container.name", "container.image.repository"
+  ],
+  "plugins": [
+    {"name": "k8saudit", "enabled": true, "note": "confirm against actual deployment"}
+  ]
+}

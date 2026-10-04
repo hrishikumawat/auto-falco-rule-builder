@@ -1,0 +1,3 @@
+{"alert_id": "fp-001", "classification": "false_positive", "exception_scope": {"container.image.repository": "registry.internal/monitoring-agent"}, "output_fields": {"proc.name": "nsenter", "k8s.ns.name": "prod"}}
+{"alert_id": "fp-002", "classification": "false_positive", "exception_scope": {"container.image.repository": "registry.internal/monitoring-agent"}, "output_fields": {"proc.name": "nsenter", "k8s.ns.name": "prod"}}
+{"alert_id": "tp-001", "classification": "true_positive", "output_fields": {"proc.name": "nsenter", "k8s.ns.name": "prod", "container.image.repository": "registry.internal/app"}}
