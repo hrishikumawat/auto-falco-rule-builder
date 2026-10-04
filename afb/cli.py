@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from .adapters.falco_json import load_alerts
 from .evidence import summarize
@@ -23,6 +24,12 @@ from .validator import validate
 from .reporter import export
 
 
+def _load_expectations(path: str | None) -> list[dict]:
+    if not path:
+        return []
+    return json.loads(Path(path).read_text())
+
+
 def cmd_create(args) -> int:
     profile = load_profile(args.profile)
     corpus = load_alerts(args.alerts)
@@ -32,12 +39,16 @@ def cmd_create(args) -> int:
     candidate = render_yaml(rule_doc)
     validation = validate(candidate, profile)
     tests = run_tests(candidate, profile, captures=args.captures or [],
+                      expectations=_load_expectations(args.expectations),
                       deployment_ruleset=args.deployment_ruleset)
     result = export(args.out, spec, candidate, validation, tests,
                     summary.to_dict(), profile, [args.alerts, args.profile])
+    rc = 0 if validation.get("status") in ("passed", "static_lint_only") else 1
+    if tests.get("status") == "failed":
+        rc = 3  # replay assertions failed — candidate does not behave as specified
     print(json.dumps({"status": validation.get("status"), "tests": tests.get("status"),
                       "out": result["out_dir"], "files": result["files"]}, indent=2))
-    return 0 if validation.get("status") in ("passed", "static_lint_only") else 1
+    return rc
 
 
 def cmd_tune(args) -> int:
@@ -45,7 +56,8 @@ def cmd_tune(args) -> int:
     classified = load_classified_alerts(args.classified_alerts)
     tuned = tune_rule(args.rule.read_text() if hasattr(args.rule, "read_text") else open(args.rule).read(), classified)
     validation = validate(tuned["tuned_yaml"], profile)
-    tests = run_tests(tuned["tuned_yaml"], profile, captures=args.captures or [])
+    tests = run_tests(tuned["tuned_yaml"], profile, captures=args.captures or [],
+                      expectations=_load_expectations(args.expectations))
     from .planner import DetectionSpec
     spec = DetectionSpec(
         spec_version=1, intent=f"tune rule {args.rule}",
@@ -76,6 +88,7 @@ def main(argv=None) -> int:
     c.add_argument("--proc", required=True, help="process name to detect (e.g. nsenter)")
     c.add_argument("--namespace", default=None, help="k8s namespace scope (omit = all namespaces)")
     c.add_argument("--captures", nargs="*", default=[], help="scap captures for replay testing")
+    c.add_argument("--expectations", default=None, help="JSON: [{capture, must_fire[], must_not_fire[]}]")
     c.add_argument("--deployment-ruleset", default=None, help="existing ruleset for overlap testing")
     c.add_argument("--out", required=True)
     c.set_defaults(func=cmd_create)
@@ -85,6 +98,7 @@ def main(argv=None) -> int:
     t.add_argument("--classified-alerts", required=True, help="JSONL with analyst classification")
     t.add_argument("--profile", required=True)
     t.add_argument("--captures", nargs="*", default=[])
+    t.add_argument("--expectations", default=None)
     t.add_argument("--out", required=True)
     t.set_defaults(func=cmd_tune)
 

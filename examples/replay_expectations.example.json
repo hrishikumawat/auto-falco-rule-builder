@@ -1,0 +1,13 @@
+[
+  {
+    "_comment": "Mocked-runner fixture only. Capture files do not exist here; use with the mocked run_fn in tests/test_runner_mocked.py, or replace with real curated/controlled-lab captures for integration runs.",
+    "capture": "nsenter_prod.scap",
+    "must_fire": ["AFB Nsenter Execution"],
+    "must_not_fire": []
+  },
+  {
+    "capture": "benign_prod.scap",
+    "must_fire": [],
+    "must_not_fire": ["AFB Nsenter Execution"]
+  }
+]

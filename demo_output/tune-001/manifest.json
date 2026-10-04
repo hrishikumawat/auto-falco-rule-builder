@@ -1,0 +1,29 @@
+{
+  "tool_version": "0.1.0",
+  "workflow": "TUNE",
+  "generated_at_utc": "2026-10-04T04:19:52.832027+00:00",
+  "profile": {
+    "name": "DEMO - NOT a real deployment profile (synthetic digest and fields)",
+    "falco_version": "0.0.0-demo-synthetic",
+    "image": "falcosecurity/falco@sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "inputs": [
+    {
+      "path": "examples/current_rule.yaml",
+      "sha256": "e47d4f96668e852eae9c611979b26e4ca036fc2a687d6f2b2fdeaf89a1f1cff0"
+    },
+    {
+      "path": "examples/classified_alerts.jsonl",
+      "sha256": "40ff0294e62e5155013a781d2551d4baa216e097c23f05152869be3f9b8b0df0"
+    }
+  ],
+  "outputs": {
+    "candidate.yaml": "056f80feb97d215e4dc373491239e2309cf05b8a5d888bd496366cf8457274c0",
+    "specification.json": "e634e72ba150d2e3a7e62ecf4fe285746918ddc1030b0303192aaaaea6a24f9f"
+  },
+  "fixture_identities": [
+    "fp-001",
+    "fp-002",
+    "tp-001"
+  ]
+}

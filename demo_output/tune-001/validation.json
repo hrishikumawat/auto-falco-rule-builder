@@ -1,0 +1,16 @@
+{
+  "static_lint": {
+    "status": "passed",
+    "errors": []
+  },
+  "container": {
+    "status": "unavailable",
+    "reason": "no reachable Docker daemon"
+  },
+  "profile": {
+    "falco_version": "0.0.0-demo-synthetic",
+    "image": "falcosecurity/falco@sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "status": "static_lint_only",
+  "note": "Runtime validation NOT performed. YAML validation alone is not proof of runtime detection."
+}

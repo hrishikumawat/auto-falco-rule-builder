@@ -31,13 +31,13 @@ def make_profile(fields=None) -> TargetProfile:
 
 def test_adapters_provenance_and_missing_fields():
     corpus = load_alerts(EXAMPLES / "nsenter_alerts.json")
-    assert len(corpus.alerts) == 6
+    assert len(corpus.alerts) == 8
     a = corpus.alerts[0]
     assert a.provenance["source"].endswith("nsenter_alerts.json")
     assert len(a.provenance["record_sha256"]) == 64
-    last = corpus.alerts[-1]
-    assert "k8s.ns.name" in last.missing_fields
-    assert last.field("k8s.ns.name") is None
+    meta_missing = corpus.alerts[5]
+    assert "k8s.ns.name" in meta_missing.missing_fields
+    assert meta_missing.field("k8s.ns.name") is None
 
 
 def test_redaction():
@@ -53,10 +53,10 @@ def test_grouping():
     corpus = load_alerts(EXAMPLES / "nsenter_alerts.json")
     s = summarize(corpus)
     by_proc = {g.proc_name: g for g in s.groups}
-    assert by_proc["nsenter"].namespaces["prod"] == 3
+    assert by_proc["nsenter"].namespaces["prod"] == 4
     assert by_proc["nsenter"].namespaces["dev"] == 1
-    assert by_proc["nsenter"].namespaces[None] == 1
-    assert s.namespace_missing == 1
+    assert by_proc["nsenter"].namespaces[None] == 2
+    assert s.namespace_missing == 2
 
 
 def test_plan_prod_nsenter():

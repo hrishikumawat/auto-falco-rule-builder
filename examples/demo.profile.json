@@ -1,0 +1,14 @@
+{
+  "name": "DEMO - NOT a real deployment profile (synthetic digest and fields)",
+  "dialect": "demo-not-a-real-deployment",
+  "falco_version": "0.0.0-demo-synthetic",
+  "image": {
+    "repository": "falcosecurity/falco",
+    "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "supported_fields": [
+    "evt.type", "proc.name", "proc.cmdline", "user.name",
+    "k8s.ns.name", "k8s.pod.name", "container.name", "container.image.repository"
+  ],
+  "plugins": []
+}

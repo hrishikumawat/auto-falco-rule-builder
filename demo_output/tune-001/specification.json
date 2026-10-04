@@ -1,0 +1,17 @@
+{
+  "spec_version": 1,
+  "intent": "tune rule examples/current_rule.yaml",
+  "match": {
+    "exception_scope": {
+      "container.image.repository": "registry.internal/monitoring-agent"
+    }
+  },
+  "required_fields": [
+    "container.image.repository"
+  ],
+  "coverage_gaps": [],
+  "limitations": [
+    "tuned exception must be reviewed by an analyst"
+  ],
+  "source_evidence": []
+}

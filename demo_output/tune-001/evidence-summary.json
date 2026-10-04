@@ -1,0 +1,11 @@
+{
+  "classified_counts": {
+    "true_positive": 1,
+    "false_positive": 2
+  },
+  "fixture_ids": [
+    "fp-001",
+    "fp-002",
+    "tp-001"
+  ]
+}

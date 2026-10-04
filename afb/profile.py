@@ -19,6 +19,7 @@ class TargetProfile:
     supported_fields: frozenset
     plugins: list[dict]
     dialect: str
+    replay: dict | None = None
 
     def field_supported(self, field_name: str) -> bool:
         return field_name in self.supported_fields
@@ -46,4 +47,5 @@ def load_profile(path: str | Path) -> TargetProfile:
         supported_fields=frozenset(data["supported_fields"]),
         plugins=list(data["plugins"]),
         dialect=data.get("dialect", "example"),
+        replay=data.get("replay"),
     )
