@@ -1,0 +1,20 @@
+{
+  "name": "Falco 0.45.0 integration lab ? not a production target",
+  "dialect": "lab",
+  "falco_version": "0.45.0",
+  "image": {
+    "repository": "falcosecurity/falco",
+    "digest": "sha256:788f1129c542171813083d4afc61b16730a47dde8c23d9c39370acef996349b6"
+  },
+  "supported_fields": [
+    "evt.type",
+    "proc.name",
+    "proc.cmdline",
+    "user.name",
+    "k8s.ns.name",
+    "k8s.pod.name",
+    "container.name",
+    "container.image.repository"
+  ],
+  "plugins": []
+}

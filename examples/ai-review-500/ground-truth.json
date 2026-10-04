@@ -1,0 +1,3122 @@
+{
+  "synthetic": true,
+  "seed": 1729,
+  "total_alerts": 500,
+  "rule_count": 10,
+  "expected_suppressed": 400,
+  "expected_preserved": 100,
+  "rules": [
+    {
+      "rule": "Noise Lab 01 Health Check",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "curl -fsS https://status.example.test/health",
+        "proc.pname": "cron",
+        "user.name": "svc-health"
+      }
+    },
+    {
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "wget -q https://artifacts.example.test/releases/app.tar.gz",
+        "proc.pname": "deploy-agent",
+        "user.name": "svc-deploy"
+      }
+    },
+    {
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "sh /opt/ops/rotate-logs.sh",
+        "proc.pname": "cron",
+        "user.name": "svc-ops"
+      }
+    },
+    {
+      "rule": "Noise Lab 04 Backup Archive",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "tar -czf /var/backups/app.tgz /srv/app/data",
+        "proc.pname": "backup-agent",
+        "user.name": "svc-backup"
+      }
+    },
+    {
+      "rule": "Noise Lab 05 Cache Scan",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "find /var/cache/app -type f -mtime +7 -print",
+        "proc.pname": "cron",
+        "user.name": "svc-cache"
+      }
+    },
+    {
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "chmod 640 /srv/app/config/runtime.conf",
+        "proc.pname": "deploy-agent",
+        "user.name": "svc-deploy"
+      }
+    },
+    {
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "chown app:app /srv/app/releases/current",
+        "proc.pname": "deploy-agent",
+        "user.name": "svc-deploy"
+      }
+    },
+    {
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "rm -f /var/cache/app/stale.marker",
+        "proc.pname": "cron",
+        "user.name": "svc-cache"
+      }
+    },
+    {
+      "rule": "Noise Lab 09 Metrics Script",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "python3 /opt/monitoring/export_metrics.py",
+        "proc.pname": "monitor-agent",
+        "user.name": "svc-monitor"
+      }
+    },
+    {
+      "rule": "Noise Lab 10 Port Probe",
+      "alerts": 50,
+      "authorized_noise": 40,
+      "preserve": 10,
+      "expected_exception_scope": {
+        "proc.cmdline": "nc -z -w 2 db.internal.example.test 5432",
+        "proc.pname": "monitor-agent",
+        "user.name": "svc-monitor"
+      }
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "noise-lab-0001",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0002",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0003",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0004",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0005",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0006",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0007",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0008",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0009",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0010",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0011",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0012",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0013",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0014",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0015",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0016",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0017",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0018",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0019",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0020",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0021",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0022",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0023",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0024",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0025",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0026",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0027",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0028",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0029",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0030",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0031",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0032",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0033",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0034",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0035",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0036",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0037",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0038",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0039",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0040",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0041",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0042",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0043",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0044",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0045",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0046",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0047",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0048",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0049",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0050",
+      "rule": "Noise Lab 01 Health Check",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0051",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0052",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0053",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0054",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0055",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0056",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0057",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0058",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0059",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0060",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0061",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0062",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0063",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0064",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0065",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0066",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0067",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0068",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0069",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0070",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0071",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0072",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0073",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0074",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0075",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0076",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0077",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0078",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0079",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0080",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0081",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0082",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0083",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0084",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0085",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0086",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0087",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0088",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0089",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0090",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0091",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0092",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0093",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0094",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0095",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0096",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0097",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0098",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0099",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0100",
+      "rule": "Noise Lab 02 Artifact Fetch",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0101",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0102",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0103",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0104",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0105",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0106",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0107",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0108",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0109",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0110",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0111",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0112",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0113",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0114",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0115",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0116",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0117",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0118",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0119",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0120",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0121",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0122",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0123",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0124",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0125",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0126",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0127",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0128",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0129",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0130",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0131",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0132",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0133",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0134",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0135",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0136",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0137",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0138",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0139",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0140",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0141",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0142",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0143",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0144",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0145",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0146",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0147",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0148",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0149",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0150",
+      "rule": "Noise Lab 03 Maintenance Shell",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0151",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0152",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0153",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0154",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0155",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0156",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0157",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0158",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0159",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0160",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0161",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0162",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0163",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0164",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0165",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0166",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0167",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0168",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0169",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0170",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0171",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0172",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0173",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0174",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0175",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0176",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0177",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0178",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0179",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0180",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0181",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0182",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0183",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0184",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0185",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0186",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0187",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0188",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0189",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0190",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0191",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0192",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0193",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0194",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0195",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0196",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0197",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0198",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0199",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0200",
+      "rule": "Noise Lab 04 Backup Archive",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0201",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0202",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0203",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0204",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0205",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0206",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0207",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0208",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0209",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0210",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0211",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0212",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0213",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0214",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0215",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0216",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0217",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0218",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0219",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0220",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0221",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0222",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0223",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0224",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0225",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0226",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0227",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0228",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0229",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0230",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0231",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0232",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0233",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0234",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0235",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0236",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0237",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0238",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0239",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0240",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0241",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0242",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0243",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0244",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0245",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0246",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0247",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0248",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0249",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0250",
+      "rule": "Noise Lab 05 Cache Scan",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0251",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0252",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0253",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0254",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0255",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0256",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0257",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0258",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0259",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0260",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0261",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0262",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0263",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0264",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0265",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0266",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0267",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0268",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0269",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0270",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0271",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0272",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0273",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0274",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0275",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0276",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0277",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0278",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0279",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0280",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0281",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0282",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0283",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0284",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0285",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0286",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0287",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0288",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0289",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0290",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0291",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0292",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0293",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0294",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0295",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0296",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0297",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0298",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0299",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0300",
+      "rule": "Noise Lab 06 Deploy Permissions",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0301",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0302",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0303",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0304",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0305",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0306",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0307",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0308",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0309",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0310",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0311",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0312",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0313",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0314",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0315",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0316",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0317",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0318",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0319",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0320",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0321",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0322",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0323",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0324",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0325",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0326",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0327",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0328",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0329",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0330",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0331",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0332",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0333",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0334",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0335",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0336",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0337",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0338",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0339",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0340",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0341",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0342",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0343",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0344",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0345",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0346",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0347",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0348",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0349",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0350",
+      "rule": "Noise Lab 07 Deploy Ownership",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0351",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0352",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0353",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0354",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0355",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0356",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0357",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0358",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0359",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0360",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0361",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0362",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0363",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0364",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0365",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0366",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0367",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0368",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0369",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0370",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0371",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0372",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0373",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0374",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0375",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0376",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0377",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0378",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0379",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0380",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0381",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0382",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0383",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0384",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0385",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0386",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0387",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0388",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0389",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0390",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0391",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0392",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0393",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0394",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0395",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0396",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0397",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0398",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0399",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0400",
+      "rule": "Noise Lab 08 Cache Cleanup",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0401",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0402",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0403",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0404",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0405",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0406",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0407",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0408",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0409",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0410",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0411",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0412",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0413",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0414",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0415",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0416",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0417",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0418",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0419",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0420",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0421",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0422",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0423",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0424",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0425",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0426",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0427",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0428",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0429",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0430",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0431",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0432",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0433",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0434",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0435",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0436",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0437",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0438",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0439",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0440",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0441",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0442",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0443",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0444",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0445",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0446",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0447",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0448",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0449",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0450",
+      "rule": "Noise Lab 09 Metrics Script",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0451",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0452",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0453",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0454",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0455",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0456",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0457",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0458",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0459",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0460",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0461",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0462",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0463",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0464",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0465",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0466",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0467",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0468",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0469",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0470",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0471",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0472",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0473",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0474",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0475",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0476",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0477",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0478",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0479",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0480",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0481",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0482",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0483",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0484",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0485",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0486",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0487",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0488",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0489",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0490",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_noise",
+      "expected_action": "suppress"
+    },
+    {
+      "alert_id": "noise-lab-0491",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0492",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0493",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0494",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0495",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "changed_command_same_identity",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0496",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0497",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0498",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_command_wrong_account",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0499",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    },
+    {
+      "alert_id": "noise-lab-0500",
+      "rule": "Noise Lab 10 Port Probe",
+      "kind": "authorized_command_wrong_parent",
+      "expected_action": "preserve"
+    }
+  ]
+}

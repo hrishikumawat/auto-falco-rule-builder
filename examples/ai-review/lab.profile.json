@@ -1,0 +1,13 @@
+{
+  "name": "Synthetic health-check tuning lab; not a production profile",
+  "dialect": "lab",
+  "falco_version": "0.45.0",
+  "image": {
+    "repository": "falcosecurity/falco",
+    "digest": "sha256:788f1129c542171813083d4afc61b16730a47dde8c23d9c39370acef996349b6"
+  },
+  "supported_fields": [
+    "evt.type", "evt.rawres", "proc.name", "proc.cmdline", "proc.pname", "user.name"
+  ],
+  "plugins": []
+}

@@ -1,0 +1,395 @@
+{
+    "schema_version":  1,
+    "diagram_type":  "architecture",
+    "meta":  {
+                 "title":  "Falco Rule Builder: Evidence to Review",
+                 "output":  "docs/diagrams/full-flow.html",
+                 "quality_profile":  "showcase",
+                 "locale":  "en",
+                 "repository":  {
+                                    "url":  "https://github.com/hrishikumawat/auto-falco-rule-builder.git",
+                                    "revision":  "0729170b4b8ad8949eb193878cac81d402e79411",
+                                    "provider":  "github",
+                                    "link_mode":  "web"
+                                }
+             },
+    "components":  [
+                       {
+                           "id":  "create",
+                           "type":  "backend",
+                           "label":  "CREATE pipeline",
+                           "sublabel":  "Alerts + intent + profile",
+                           "tag":  "Group \u003e spec \u003e template YAML",
+                           "pos":  [
+                                       40,
+                                       80
+                                   ],
+                           "size":  [
+                                        230,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  42,
+                                               "end_line":  54
+                                           },
+                                           {
+                                               "path":  "docs/architecture.md",
+                                               "line":  8,
+                                               "end_line":  18
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "tune",
+                           "type":  "backend",
+                           "label":  "TUNE pipeline",
+                           "sublabel":  "Rule + analyst FP/TP labels",
+                           "tag":  "Scoped exception; preserve TPs",
+                           "pos":  [
+                                       40,
+                                       310
+                                   ],
+                           "size":  [
+                                        230,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  63,
+                                               "end_line":  86
+                                           },
+                                           {
+                                               "path":  "docs/replay-validation.md",
+                                               "line":  49,
+                                               "end_line":  50
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "fixtures",
+                           "type":  "database",
+                           "label":  "Replay fixtures",
+                           "sublabel":  "scap + fire / no-fire assertions",
+                           "pos":  [
+                                       420,
+                                       20
+                                   ],
+                           "size":  [
+                                        240,
+                                        80
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  27,
+                                               "end_line":  30
+                                           },
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  101,
+                                               "end_line":  103
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "checks",
+                           "type":  "backend",
+                           "label":  "Validation + replay",
+                           "sublabel":  "Static lint \u003e engine \u003e assertions",
+                           "tag":  "Isolated + deployment comparison",
+                           "pos":  [
+                                       420,
+                                       230
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  49,
+                                               "end_line":  54
+                                           },
+                                           {
+                                               "path":  "afb/validator.py",
+                                               "line":  100,
+                                               "end_line":  157
+                                           },
+                                           {
+                                               "path":  "afb/test_runner.py",
+                                               "line":  53,
+                                               "end_line":  118
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "runtime",
+                           "type":  "security",
+                           "label":  "Pinned Falco runtime",
+                           "sublabel":  "Docker; read-only mounted files",
+                           "tag":  "No network; exact image digest",
+                           "pos":  [
+                                       850,
+                                       230
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/runtime.py",
+                                               "line":  4,
+                                               "end_line":  29
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "profile",
+                           "type":  "database",
+                           "label":  "Target runtime profile",
+                           "sublabel":  "Version, config, ordered rules",
+                           "tag":  "Lab profile is not production",
+                           "pos":  [
+                                       850,
+                                       470
+                                   ],
+                           "size":  [
+                                        240,
+                                        90
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/runtime.py",
+                                               "line":  4,
+                                               "end_line":  29
+                                           },
+                                           {
+                                               "path":  "docs/replay-validation.md",
+                                               "line":  33,
+                                               "end_line":  38
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "export",
+                           "type":  "backend",
+                           "label":  "Reporter / exporter",
+                           "sublabel":  "Ready: engine + real replay pass",
+                           "tag":  "Failures / incomplete also recorded",
+                           "pos":  [
+                                       420,
+                                       570
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/reporter.py",
+                                               "line":  17,
+                                               "end_line":  45
+                                           },
+                                           {
+                                               "path":  "afb/reporter.py",
+                                               "line":  47,
+                                               "end_line":  65
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "package",
+                           "type":  "database",
+                           "label":  "Review package",
+                           "sublabel":  "YAML, spec, evidence, test results",
+                           "tag":  "Hashes + report; TUNE adds diff",
+                           "pos":  [
+                                       40,
+                                       570
+                                   ],
+                           "size":  [
+                                        230,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/reporter.py",
+                                               "line":  34,
+                                               "end_line":  65
+                                           },
+                                           {
+                                               "path":  "afb/reporter.py",
+                                               "line":  68,
+                                               "end_line":  105
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "review",
+                           "type":  "external",
+                           "label":  "Detection repository PR",
+                           "sublabel":  "Security review + CI approval",
+                           "tag":  "Outside builder; human gate",
+                           "pos":  [
+                                       40,
+                                       840
+                                   ],
+                           "size":  [
+                                        230,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "docs/architecture.md",
+                                               "line":  30,
+                                               "end_line":  34
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "staging",
+                           "type":  "external",
+                           "label":  "Staging observation",
+                           "sublabel":  "Review approved candidates",
+                           "tag":  "Proposed organization workflow",
+                           "pos":  [
+                                       420,
+                                       840
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "docs/architecture.md",
+                                               "line":  30,
+                                               "end_line":  34
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "gitops",
+                           "type":  "external",
+                           "label":  "GitOps deployment",
+                           "sublabel":  "Release + collect SOC feedback",
+                           "tag":  "Outside builder; no auto-deploy",
+                           "pos":  [
+                                       850,
+                                       840
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "docs/architecture.md",
+                                               "line":  30,
+                                               "end_line":  34
+                                           }
+                                       ]
+                       }
+                   ],
+    "connections":  [
+                        {
+                            "id":  "create-check",
+                            "from":  "create",
+                            "to":  "checks",
+                            "label":  "candidate",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "tune-check",
+                            "from":  "tune",
+                            "to":  "checks",
+                            "label":  "tuned YAML",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "fixtures-check",
+                            "from":  "fixtures",
+                            "to":  "checks",
+                            "label":  "replay inputs"
+                        },
+                        {
+                            "id":  "check-runtime",
+                            "from":  "checks",
+                            "to":  "runtime",
+                            "label":  "validate / replay",
+                            "variant":  "security"
+                        },
+                        {
+                            "id":  "profile-runtime",
+                            "from":  "profile",
+                            "to":  "runtime",
+                            "label":  "pin configuration",
+                            "variant":  "security"
+                        },
+                        {
+                            "id":  "check-export",
+                            "from":  "checks",
+                            "to":  "export",
+                            "label":  "results + status"
+                        },
+                        {
+                            "id":  "export-package",
+                            "from":  "export",
+                            "to":  "package",
+                            "label":  "write files",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "package-review",
+                            "from":  "package",
+                            "to":  "review",
+                            "label":  "manual handoff",
+                            "variant":  "dashed"
+                        },
+                        {
+                            "id":  "review-staging",
+                            "from":  "review",
+                            "to":  "staging",
+                            "label":  "approved + CI pass",
+                            "variant":  "dashed"
+                        },
+                        {
+                            "id":  "staging-gitops",
+                            "from":  "staging",
+                            "to":  "gitops",
+                            "label":  "accepted in staging",
+                            "variant":  "dashed"
+                        }
+                    ],
+    "cards":  [
+                  {
+                      "dot":  "cyan",
+                      "title":  "How logs become a rule",
+                      "items":  [
+                                    "The CLI reads JSON/JSONL alerts, groups evidence, preserves provenance and missing fields, and redacts exports.",
+                                    "Explicit process / namespace intent and supported profile fields drive deterministic templates. No LLM in v1; matched alerts are not a behavior baseline."
+                                ]
+                  },
+                  {
+                      "dot":  "emerald",
+                      "title":  "What is proven",
+                      "items":  [
+                                    "Falco 0.45.0 lab replay passed process positive/negative, tuning suppress/preserve, and ordered dependencies.",
+                                    "Combined replay detected an earlier overlapping rule. Hermes independently passed the 41-test unit suite."
+                                ]
+                  },
+                  {
+                      "dot":  "amber",
+                      "title":  "What remains",
+                      "items":  [
+                                    "The host capture has no Kubernetes metadata: prod/dev nsenter detection remains unproven.",
+                                    "Provide metadata-bearing captures and the organization\u0027s real deployment profile. Keep the builder central between SOC evidence and human-reviewed detection changes."
+                                ]
+                  }
+              ]
+}

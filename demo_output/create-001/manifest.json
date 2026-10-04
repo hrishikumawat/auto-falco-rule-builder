@@ -1,0 +1,25 @@
+{
+  "tool_version": "0.1.0",
+  "workflow": "CREATE",
+  "generated_at_utc": "2026-10-04T04:45:42.558121+00:00",
+  "profile": {
+    "name": "DEMO - NOT a real deployment profile (synthetic digest and fields)",
+    "falco_version": "0.0.0-demo-synthetic",
+    "image": "falcosecurity/falco@sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "inputs": [
+    {
+      "path": "examples/nsenter_alerts.json",
+      "sha256": "6aa0f9a60a512cb864cd1dee60fb71b0aa50c101375ef56a8ee6a006d266e66c"
+    },
+    {
+      "path": "examples/demo.profile.json",
+      "sha256": "42edeba10fb09ab04b39178604b4d3a696a14c9c6cfdda44f8d8e317d51ac1c9"
+    }
+  ],
+  "outputs": {
+    "candidate.yaml": "284dffdec3124d701a61e2dfcc76043d4606e990916529f3995ebb7196ad7c64",
+    "specification.json": "c6bc562ecc5864b51e8f46fda3cd14da0b9efa56d25cd8141e64d31c0499b83b"
+  },
+  "fixture_identities": []
+}

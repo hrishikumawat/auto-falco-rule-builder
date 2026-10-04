@@ -1,0 +1,2 @@
+The service account svc-health is authorized to run curl -fsS https://status.example.test/health from cron.
+Downloading unapproved.sh from downloads.example.test is unauthorized, even from the health-check account or cron.

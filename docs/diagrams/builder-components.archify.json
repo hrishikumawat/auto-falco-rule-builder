@@ -1,0 +1,323 @@
+{
+    "schema_version":  1,
+    "diagram_type":  "architecture",
+    "meta":  {
+                 "title":  "Inside the Falco Rule Builder",
+                 "output":  "docs/diagrams/builder-components.html",
+                 "quality_profile":  "showcase",
+                 "locale":  "en",
+                 "repository":  {
+                                    "url":  "https://github.com/hrishikumawat/auto-falco-rule-builder.git",
+                                    "revision":  "0729170b4b8ad8949eb193878cac81d402e79411",
+                                    "provider":  "github",
+                                    "link_mode":  "web"
+                                }
+             },
+    "components":  [
+                       {
+                           "id":  "ingest",
+                           "type":  "backend",
+                           "label":  "CLI + evidence reader",
+                           "sublabel":  "Read JSON/JSONL; group activity",
+                           "tag":  "Keep provenance + missing fields",
+                           "pos":  [
+                                       40,
+                                       80
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  42,
+                                               "end_line":  60
+                                           },
+                                           {
+                                               "path":  "afb/adapters/falco_json.py",
+                                               "line":  65,
+                                               "end_line":  108
+                                           },
+                                           {
+                                               "path":  "afb/evidence.py",
+                                               "line":  49,
+                                               "end_line":  77
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "plan",
+                           "type":  "backend",
+                           "label":  "Planner + profile loader",
+                           "sublabel":  "Process / scope \u003e detection spec",
+                           "tag":  "Check target version + fields",
+                           "pos":  [
+                                       460,
+                                       80
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/planner.py",
+                                               "line":  40,
+                                               "end_line":  102
+                                           },
+                                           {
+                                               "path":  "afb/profile.py",
+                                               "line":  31,
+                                               "end_line":  57
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "generate",
+                           "type":  "backend",
+                           "label":  "Template generator",
+                           "sublabel":  "Spec \u003e macros + rule YAML",
+                           "tag":  "Deterministic; no LLM in v1",
+                           "pos":  [
+                                       880,
+                                       80
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/template_gen.py",
+                                               "line":  11,
+                                               "end_line":  54
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "tune",
+                           "type":  "backend",
+                           "label":  "Optional TUNE module",
+                           "sublabel":  "Existing YAML + analyst FP/TP",
+                           "tag":  "Narrow exception; retain positives",
+                           "pos":  [
+                                       460,
+                                       300
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/tune.py",
+                                               "line":  25,
+                                               "end_line":  94
+                                           },
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  63,
+                                               "end_line":  86
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "validate",
+                           "type":  "backend",
+                           "label":  "Validator",
+                           "sublabel":  "Lint + Falco engine validation",
+                           "tag":  "Target profile + ordered dependencies",
+                           "pos":  [
+                                       880,
+                                       520
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/validator.py",
+                                               "line":  100,
+                                               "end_line":  157
+                                           },
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  49,
+                                               "end_line":  52
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "replay",
+                           "type":  "backend",
+                           "label":  "Replay test runner",
+                           "sublabel":  "scap + fire / no-fire assertions",
+                           "tag":  "Isolated + existing-rules comparison",
+                           "pos":  [
+                                       460,
+                                       520
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/test_runner.py",
+                                               "line":  53,
+                                               "end_line":  118
+                                           },
+                                           {
+                                               "path":  "afb/cli.py",
+                                               "line":  49,
+                                               "end_line":  54
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "export",
+                           "type":  "backend",
+                           "label":  "Reporter / file exporter",
+                           "sublabel":  "candidate.yaml + review evidence",
+                           "tag":  "Ready only: engine + real replay pass",
+                           "pos":  [
+                                       40,
+                                       520
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/reporter.py",
+                                               "line":  17,
+                                               "end_line":  45
+                                           },
+                                           {
+                                               "path":  "afb/reporter.py",
+                                               "line":  47,
+                                               "end_line":  105
+                                           }
+                                       ]
+                       },
+                       {
+                           "id":  "runtime",
+                           "type":  "security",
+                           "label":  "Shared Falco runtime",
+                           "sublabel":  "Docker with target image digest",
+                           "tag":  "Read-only mounts; no network",
+                           "pos":  [
+                                       880,
+                                       770
+                                   ],
+                           "size":  [
+                                        240,
+                                        100
+                                    ],
+                           "sources":  [
+                                           {
+                                               "path":  "afb/runtime.py",
+                                               "line":  4,
+                                               "end_line":  29
+                                           },
+                                           {
+                                               "path":  "afb/validator.py",
+                                               "line":  139,
+                                               "end_line":  147
+                                           },
+                                           {
+                                               "path":  "afb/test_runner.py",
+                                               "line":  28,
+                                               "end_line":  40
+                                           }
+                                       ]
+                       }
+                   ],
+    "connections":  [
+                        {
+                            "id":  "evidence-spec",
+                            "from":  "ingest",
+                            "to":  "plan",
+                            "label":  "grouped evidence",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "spec-template",
+                            "from":  "plan",
+                            "to":  "generate",
+                            "label":  "supported spec",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "yaml-validation",
+                            "from":  "generate",
+                            "to":  "validate",
+                            "label":  "candidate YAML",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "tuned-validation",
+                            "from":  "tune",
+                            "to":  "validate",
+                            "label":  "tuned YAML + diff"
+                        },
+                        {
+                            "id":  "validation-replay",
+                            "from":  "validate",
+                            "to":  "replay",
+                            "label":  "CLI: next check",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "checks-export",
+                            "from":  "replay",
+                            "to":  "export",
+                            "label":  "CLI: all results",
+                            "variant":  "emphasis"
+                        },
+                        {
+                            "id":  "validation-runtime",
+                            "from":  "validate",
+                            "to":  "runtime",
+                            "label":  "engine validation",
+                            "variant":  "security"
+                        },
+                        {
+                            "id":  "replay-runtime",
+                            "from":  "replay",
+                            "to":  "runtime",
+                            "label":  "execute replay",
+                            "variant":  "security"
+                        }
+                    ],
+    "cards":  [
+                  {
+                      "dot":  "cyan",
+                      "title":  "Engineer supplies",
+                      "items":  [
+                                    "Falco alert file, explicit process / namespace intent, and a profile matching their own Falco deployment.",
+                                    "Real replay needs compatible scap captures and positive / negative assertions. JSON alerts alone are not runtime tests."
+                                ]
+                  },
+                  {
+                      "dot":  "emerald",
+                      "title":  "Use the exported rule file",
+                      "items":  [
+                                    "Recommended: review candidate.yaml and add it as a separate Helm customRules file.",
+                                    "Alternatively replace your owned custom file, or merge entries into it and retest. The builder currently exports files; it does not edit Helm values or deployed rules."
+                                ]
+                  },
+                  {
+                      "dot":  "amber",
+                      "title":  "Two files can be loaded together",
+                      "items":  [
+                                    "Helm customRules mounts named files under /etc/falco/rules.d; include that directory in falco.rules_files.",
+                                    "Multiple files are loaded in order, not concatenated on disk. Check rule/macro names, override semantics, dependencies and overlap before applying.",
+                                    "Exported failure / incomplete reports are not approval to install. Helm handoff is described in the companion onboarding note."
+                                ]
+                  }
+              ]
+}

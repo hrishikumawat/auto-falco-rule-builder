@@ -1,0 +1,18 @@
+[
+  {"time": "2026-10-04T09:00:00Z", "rule": "Synthetic fixture — DO NOT treat as real telemetry", "priority": "Warning",
+   "output_fields": {"evt.type": "execve", "proc.name": "nsenter", "k8s.ns.name": "prod", "k8s.pod.name": "app-7d9", "container.name": "app", "container.image.repository": "registry.internal/app", "user.name": "svc-account", "proc.cmdline": "nsenter -t 1 -m -u -i -n -p -- some-command"}},
+  {"time": "2026-10-04T09:01:10Z", "priority": "Warning",
+   "output_fields": {"evt.type": "execve", "proc.name": "nsenter", "k8s.ns.name": "prod", "k8s.pod.name": "app-7d9", "container.name": "app", "user.name": "svc-account"}},
+  {"time": "2026-10-04T09:02:00Z", "priority": "Warning",
+   "output_fields": {"evt.type": "execve", "proc.name": "nsenter", "k8s.ns.name": "prod", "k8s.pod.name": "app-x2", "container.name": "app", "user.name": "svc-account"}},
+  {"time": "2026-10-04T10:00:00Z", "priority": "Warning",
+   "output_fields": {"evt.type": "execve", "proc.name": "nsenter", "k8s.ns.name": "dev", "k8s.pod.name": "dev-1", "container.name": "dev", "user.name": "dev-user"}},
+  {"time": "2026-10-04T10:05:00Z", "priority": "Warning",
+   "output_fields": {"evt.type": "execve", "proc.name": "bash", "k8s.ns.name": "prod", "k8s.pod.name": "app-7d9", "container.name": "app", "user.name": "svc-account"}},
+  {"time": "2026-10-04T11:00:00Z", "priority": "Warning",
+   "output_fields": {"evt.type": "execve", "proc.name": "nsenter", "k8s.pod.name": "meta-missing", "container.name": "app", "user.name": "svc-account"}},
+  {"time": "2026-10-04T11:05:00Z", "priority": "Warning",
+   "output_fields": {"evt.type": "execve", "proc.name": "nsenter", "k8s.pod.name": "meta-missing-2", "container.name": "node-agent", "user.name": "svc-account"}},
+  {"time": "2026-10-04T12:00:00Z", "priority": "Warning",
+   "output_fields": {"evt.type": "execve", "proc.name": "nsenter", "k8s.ns.name": "prod", "k8s.pod.name": "monitor-agent-x1", "container.name": "monitoring-agent", "container.image.repository": "registry.internal/monitoring-agent", "user.name": "svc-account"}}
+]

@@ -1,0 +1,31 @@
+{
+  "spec_version": 1,
+  "intent": "detect nsenter execution in namespace prod",
+  "match": {
+    "evt.type": "execve",
+    "proc.name": "nsenter",
+    "scope": {
+      "k8s.ns.name": [
+        "prod"
+      ]
+    }
+  },
+  "required_fields": [
+    "evt.type",
+    "proc.name",
+    "k8s.ns.name"
+  ],
+  "coverage_gaps": [
+    "2 of 7 alerts lack k8s.ns.name metadata; scope enforcement depends on cluster metadata being present at event time"
+  ],
+  "limitations": [
+    "proc.name matching misses renamed binaries (e.g. copying nsenter to another name); full-path/proc.exepath hardening is future work"
+  ],
+  "source_evidence": [
+    {
+      "source": "examples\\nsenter_alerts.json",
+      "index": 0,
+      "record_sha256": "2c8876d422b18a704811f6e5ebba36fc75ddabee32c6065bda3f95b802f62a2c"
+    }
+  ]
+}
