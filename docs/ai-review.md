@@ -137,3 +137,8 @@ suppression, preservation, dependency-order and intentional-failure checks.
 The live review capture does not contain the synthetic health-check activity,
 so it does not prove that activity's suppression or Kubernetes coverage.
 This is a smoke test, not a measured model accuracy claim.
+
+For a larger exercise, use the [500-alert, 10-rule noise lab](../examples/ai-review-500/README.md).
+It includes suspicious lookalikes, separate ground truth and a scorer for
+accepted decisions. Its target is 400 noise events removed with 100 suspicious
+events preserved; review every proposal rather than assuming that result.

@@ -1,0 +1,11 @@
+Synthetic lab authorization policy. All activity not explicitly authorized below must remain detectable. Frequency alone does not establish authorization.
+Noise Lab 01 Health Check: authorize ONLY command [curl -fsS https://status.example.test/health] with parent [cron] and account [svc-health].
+Noise Lab 02 Artifact Fetch: authorize ONLY command [wget -q https://artifacts.example.test/releases/app.tar.gz] with parent [deploy-agent] and account [svc-deploy].
+Noise Lab 03 Maintenance Shell: authorize ONLY command [sh /opt/ops/rotate-logs.sh] with parent [cron] and account [svc-ops].
+Noise Lab 04 Backup Archive: authorize ONLY command [tar -czf /var/backups/app.tgz /srv/app/data] with parent [backup-agent] and account [svc-backup].
+Noise Lab 05 Cache Scan: authorize ONLY command [find /var/cache/app -type f -mtime +7 -print] with parent [cron] and account [svc-cache].
+Noise Lab 06 Deploy Permissions: authorize ONLY command [chmod 640 /srv/app/config/runtime.conf] with parent [deploy-agent] and account [svc-deploy].
+Noise Lab 07 Deploy Ownership: authorize ONLY command [chown app:app /srv/app/releases/current] with parent [deploy-agent] and account [svc-deploy].
+Noise Lab 08 Cache Cleanup: authorize ONLY command [rm -f /var/cache/app/stale.marker] with parent [cron] and account [svc-cache].
+Noise Lab 09 Metrics Script: authorize ONLY command [python3 /opt/monitoring/export_metrics.py] with parent [monitor-agent] and account [svc-monitor].
+Noise Lab 10 Port Probe: authorize ONLY command [nc -z -w 2 db.internal.example.test 5432] with parent [monitor-agent] and account [svc-monitor].

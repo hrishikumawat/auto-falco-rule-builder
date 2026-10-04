@@ -1,0 +1,93 @@
+# SYNTHETIC LAB: all ten rules are intentionally noisy.
+- macro: noise_lab_successful_exec
+  condition: evt.type in (execve, execveat) and evt.rawres >= 0
+- rule: Noise Lab 01 Health Check
+  desc: Synthetic broad curl execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "curl"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 02 Artifact Fetch
+  desc: Synthetic broad wget execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "wget"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 03 Maintenance Shell
+  desc: Synthetic broad sh execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "sh"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 04 Backup Archive
+  desc: Synthetic broad tar execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "tar"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 05 Cache Scan
+  desc: Synthetic broad find execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "find"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 06 Deploy Permissions
+  desc: Synthetic broad chmod execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "chmod"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 07 Deploy Ownership
+  desc: Synthetic broad chown execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "chown"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 08 Cache Cleanup
+  desc: Synthetic broad rm execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "rm"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 09 Metrics Script
+  desc: Synthetic broad python3 execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "python3"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
+- rule: Noise Lab 10 Port Probe
+  desc: Synthetic broad nc execution alert for noise-tuning practice
+  condition: noise_lab_successful_exec and proc.name = "nc"
+  output: Synthetic execution (command=%proc.cmdline parent=%proc.pname user=%user.name)
+  priority: WARNING
+  tags:
+  - synthetic
+  - noise-lab
+  - process
