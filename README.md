@@ -54,6 +54,33 @@ uv venv .venv && uv pip install --python .venv/bin/python -e . pytest
 .venv/bin/python -m pytest tests/ -q
 ```
 
+## Docker-free demo
+
+```bash
+./scripts/demo_docker_free.sh
+```
+Runs CREATE + TUNE end-to-end on synthetic fixtures with a labeled demo
+profile (not a real deployment). Outputs land in `demo_output/` and are
+committed: every report states exactly what ran — `static_lint_only`
+validation and `not_run` tests. This is pipeline-mechanics demonstration,
+**not** runtime detection proof.
+
+## Replay testing
+
+Needs a scap capture + expectations JSON
+(`examples/replay_expectations.example.json` shows the shape):
+```bash
+python -m afb.cli create ... --captures *.scap --expectations expectations.json
+```
+Replay flags default to `falco -c ... -o json_output=true -r candidate.yaml
+[-r deployment.yaml] -e capture.scap`; override per deployed version via a
+profile `"replay"` block — otherwise the invocation is recorded in
+`test-results.json` as `unverified_default`. Real integration tests use
+curated or controlled-lab captures; production telemetry is not required for
+development progress. Mocked runner unit tests (tests/test_runner_mocked.py)
+verify command construction and assertion logic without Docker and are
+labeled as NOT runtime detection proof.
+
 ## Limitations (explicit)
 
 - `proc.name` matching misses renamed binaries.
